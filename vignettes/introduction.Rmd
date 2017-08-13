@@ -1,0 +1,34 @@
+---
+title: "Introduction to colorblindr"
+author: "Claire D. McWhite and Claus O. Wilke"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 4.5
+    fig_height: 3
+vignette: >
+  %\VignetteIndexEntry{Introduction to colorblindr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+# Basic usage
+
+Make a figure:
+
+```{r}
+library(ggplot2)
+p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
+   geom_density(alpha = 0.7)
+
+p
+```
+
+Convert to simulated color-blind version:
+```{r}
+library(colorblindr)
+g <- ggplotGrob(p)
+
+g2 <- edit_colors(g, deutan)
+cowplot::ggdraw(g2)
+```

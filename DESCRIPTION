@@ -8,20 +8,22 @@ Authors@R: c(
 Description: Still needed...
 URL: https://github.com/clauswilke/colorblindr
 Depends:
-    R (>= 3.2),
-    grid,
+    R (>= 3.2)
 Imports:
-    cowplot (> 0.8.0)
+    cowplot (> 0.8.0),
+    dichromat
 License: GPL-2 | file LICENSE
 LazyData: true
 Suggests:
     covr,
+    ggplot2,
     knitr,
     testthat,
     vdiffr,
     viridis
 VignetteBuilder: knitr
 Collate:
+    'color_conversion.R'
     'edit_colors.R'
     'utils.R'
 RoxygenNote: 6.0.1

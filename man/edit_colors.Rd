@@ -7,6 +7,8 @@
 edit_colors(grob, colfun = passthrough, fillfun = colfun)
 }
 \arguments{
+\item{grob}{The grid graphics object to edit.}
+
 \item{colfun}{The function used to edit colors (\code{col} in \code{gpar} objects).}
 
 \item{fillfun}{The function used to edit fill colors (\code{fill} in \code{gpar} objects).
@@ -14,4 +16,15 @@ By default the same as \code{colfun}.}
 }
 \description{
 Edit colors in existing plot or grid object
+}
+\examples{
+library(ggplot2)
+p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
+  geom_density(alpha = 0.7)
+g <- ggplotGrob(p)
+
+g2 <- edit_colors(g, deutan)
+g3 <- edit_colors(g, protan)
+g4 <- edit_colors(g, tritan)
+cowplot::plot_grid(g, g2, g3, g4)
 }

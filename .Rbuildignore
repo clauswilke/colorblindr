@@ -5,4 +5,4 @@ visual_test
 ^\.codecov\.yml$
 ^README\.Rmd$
 ^cran-comments.md$
-^TODO\.Rmd$
+^TODO\.md$

@@ -1,4 +1,4 @@
 library(testthat)
-library(colorblindr
+library(colorblindr)
 
 test_check("colorblindr")
