@@ -1,0 +1,28 @@
+Package: colorblindr
+Type: Package
+Title: Simulate colorblindness in production-ready R figures
+Version: 0.1.0
+Authors@R: c( 
+    person("Claire D.", "McWhite", , "claire.mcwhite@utexas.edu", c("aut")),
+    person("Claus O.", "Wilke", , "wilke@austin.utexas.edu", c("cre", "aut")))
+Description: Still needed...
+URL: https://github.com/clauswilke/colorblindr
+Depends:
+    R (>= 3.2),
+    grid,
+Imports:
+    cowplot (> 0.8.0)
+License: GPL-2 | file LICENSE
+LazyData: true
+Suggests:
+    covr,
+    knitr,
+    testthat,
+    vdiffr,
+    viridis
+VignetteBuilder: knitr
+Collate:
+    'edit_colors.R'
+    'utils.R'
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
