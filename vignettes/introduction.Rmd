@@ -25,10 +25,15 @@ p
 ```
 
 Convert to simulated color-blind version:
-```{r}
+```{r message=FALSE}
 library(colorblindr)
-g <- ggplotGrob(p)
+p2 <- edit_colors(p, deutan)
+cowplot::ggdraw(p2)
+```
 
-g2 <- edit_colors(g, deutan)
-cowplot::ggdraw(g2)
+Or make a desaturated version:
+```{r message=FALSE}
+library(colorspace) # for desaturate function
+p2 <- edit_colors(p, desaturate)
+cowplot::ggdraw(p2)
 ```

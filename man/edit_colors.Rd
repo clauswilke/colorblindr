@@ -2,29 +2,39 @@
 % Please edit documentation in R/edit_colors.R
 \name{edit_colors}
 \alias{edit_colors}
+\alias{edit_grob_colors}
 \title{Edit colors in existing plot or grid object}
 \usage{
-edit_colors(grob, colfun = passthrough, fillfun = colfun)
+edit_colors(plot, colfun = passthrough, fillfun = colfun)
+
+edit_grob_colors(grob, colfun = passthrough, fillfun = colfun)
 }
 \arguments{
-\item{grob}{The grid graphics object to edit.}
+\item{plot}{The plot or grid graphics object to edit. The function \code{edit_colors()} can
+accept any object that can be handled by \code{\link[cowplot:plot_to_gtable]{cowplot::plot_to_gtable()}}.}
 
 \item{colfun}{The function used to edit colors (\code{col} in \code{gpar} objects).}
 
 \item{fillfun}{The function used to edit fill colors (\code{fill} in \code{gpar} objects).
 By default the same as \code{colfun}.}
+
+\item{grob}{The grid graphics object to edit.}
 }
 \description{
-Edit colors in existing plot or grid object
+The function \code{edit_colors()} can modify colors in existing ggplot2 plots, grid objects,
+or R base plots provided as recorded plots.
+
+The function \code{edit_grob_colors()} is identical to \code{edit_colors()} except it works only with objects of
+class \code{grob} and doesn't check its input.
 }
 \examples{
 library(ggplot2)
+library(colorspace) # for desaturate
 p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
   geom_density(alpha = 0.7)
-g <- ggplotGrob(p)
 
-g2 <- edit_colors(g, deutan)
-g3 <- edit_colors(g, protan)
-g4 <- edit_colors(g, tritan)
-cowplot::plot_grid(g, g2, g3, g4)
+p2 <- edit_colors(p, deutan)
+p3 <- edit_colors(p, tritan)
+p4 <- edit_colors(p, desaturate)
+cowplot::plot_grid(p, p2, p3, p4)
 }
