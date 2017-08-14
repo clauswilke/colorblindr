@@ -19,7 +19,7 @@
 #' p4 <- edit_colors(p, desaturate)
 #' cowplot::plot_grid(p, p2, p3, p4)
 #' @export
-edit_colors <- function(plot, colfun = passthrough, fillfun = NULL)
+edit_colors <- function(plot, colfun = passthrough, fillfun = NULL, ...)
 {
   # convert to grob if necessary
   if (!methods::is(plot, "grob")) {
@@ -29,7 +29,7 @@ edit_colors <- function(plot, colfun = passthrough, fillfun = NULL)
   if (is.null(fillfun)) {
     fillfun = colfun
   }
-  edit_grob_colors(plot, colfun, fillfun)
+  edit_grob_colors(plot, colfun, fillfun, ...)
 }
 
 
@@ -39,27 +39,27 @@ edit_colors <- function(plot, colfun = passthrough, fillfun = NULL)
 #' @param grob The grid graphics object to edit.
 #' @rdname edit_colors
 #' @export
-edit_grob_colors <- function(grob, colfun, fillfun)
+edit_grob_colors <- function(grob, colfun, fillfun, ...)
 {
   if (!is.null(grob$gp)) {
     if (!is.null(grob$gp$col)) {
-      grob$gp$col <- colfun(grob$gp$col)
+      grob$gp$col <- colfun(grob$gp$col, ...)
     }
     if (!is.null(grob$gp$fill)) {
-      grob$gp$fill <- fillfun(grob$gp$fill)
+      grob$gp$fill <- fillfun(grob$gp$fill, ...)
     }
   }
 
   if (!is.null(grob$grobs)) {
-    grob$grobs <- lapply(grob$grobs, edit_grob_colors, colfun, fillfun)
+    grob$grobs <- lapply(grob$grobs, edit_grob_colors, colfun, fillfun, ...)
   }
 
   if (!is.null(grob$children)) {
-    grob$children <- lapply(grob$children, edit_grob_colors, colfun, fillfun)
+    grob$children <- lapply(grob$children, edit_grob_colors, colfun, fillfun, ...)
   }
 
   if (methods::is(grob, "rastergrob")) {
-    grob <- edit_rastergrob_colors(grob, colfun)
+    grob <- edit_rastergrob_colors(grob, colfun, ...)
   }
 
   grob
@@ -69,9 +69,9 @@ edit_grob_colors <- function(grob, colfun, fillfun)
 # internal function that can adjust rastergrobs
 # important: it only changes the raster data, not
 # any of the other gp data.
-edit_rastergrob_colors <- function(grob, colfun)
+edit_rastergrob_colors <- function(grob, colfun, ...)
 {
-  rasternew <- colfun(grob$raster)
+  rasternew <- colfun(grob$raster, ...)
   dim(rasternew) <- dim(grob$raster)
   class(rasternew) <- class(grob$raster)
   grid::editGrob(grob, raster = rasternew)

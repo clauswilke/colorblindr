@@ -10,8 +10,17 @@ deutan <- function(colors) dichromat::dichromat(colors, type = "deutan")
 #' @export
 protan <- function(colors) dichromat::dichromat(colors, type = "protan")
 
-#' `tritan` converts colors using the protan model of colorblindness
+#' `tritan` converts colors using the tritan model of colorblindness
 #'
 #' @rdname deutan
 #' @export
 tritan <- function(colors) dichromat::dichromat(colors, type = "tritan")
+
+#' `deutanomaly` converts colors using the deutanomaly model of colorblindness
+#' @param colors Vector of colors to convert
+#' @export
+
+deutanomaly <- function(colors, sev='30') simulate_colorblind(colors, cvd=deutanomaly_cvd[sev][[1]])
+
+
+

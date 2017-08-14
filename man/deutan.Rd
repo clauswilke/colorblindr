@@ -20,5 +20,5 @@ tritan(colors)
 
 \code{protan} converts colors using the protan model of colorblindness
 
-\code{tritan} converts colors using the protan model of colorblindness
+\code{tritan} converts colors using the tritan model of colorblindness
 }
