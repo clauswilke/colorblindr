@@ -19,3 +19,5 @@ knitr::opts_chunk$set(
 
 
 Simulate colorblindness in production-ready R figures. Written by Claire D. McWhite and Claus O. Wilke.
+
+This is an experimental package in early development. Don't expect anything to work.
