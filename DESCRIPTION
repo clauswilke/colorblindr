@@ -22,6 +22,7 @@ Suggests:
     colorspace,
     covr,
     ggplot2,
+    gtable,
     knitr,
     testthat,
     vdiffr,

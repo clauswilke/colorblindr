@@ -36,3 +36,16 @@ test_that('grob trees', {
   expect_equal(g2$children[[1]]$gp$col, "#FFFFFF")
   expect_equal(g2$children[[2]]$gp$fill, "#FFFFFF")
 })
+
+
+test_that('gtables', {
+  g <- grid::circleGrob(r = .3, gp = grid::gpar(col = '#FF0000', fill = '#0000FF'))
+
+  gt <- gtable::gtable(unit(c(2, 2, 2), "cm"), unit(c(2, 2, 2), "cm"))
+  gt <- gtable::gtable_add_grob(gt, g, 2, 2)
+
+  to_white <- function(c) {"#FFFFFF"} # convert everything to white
+  g2 <- edit_colors(gt, colfun = to_white)
+  expect_equal(g2$grobs[[1]]$gp$col, "#FFFFFF")
+  expect_equal(g2$grobs[[1]]$gp$fill, "#FFFFFF")
+})
