@@ -18,3 +18,10 @@ test_that('different color and fill functions', {
   expect_equal(g2$gp$col, "#FFFFFF")
   expect_equal(g2$gp$fill, "#000000")
 })
+
+test_that('raster grobs', {
+  colors = c("#FF0000", "#00FF00", "#0000FF", "#0F0F0F")
+  g <- grid::rasterGrob(image = colors)
+  g2 <- edit_colors(g, colorspace::desaturate)
+  expect_equal(c(g2$raster), colorspace::desaturate(colors))
+})

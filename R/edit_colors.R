@@ -58,5 +58,22 @@ edit_grob_colors <- function(grob, colfun, fillfun)
     grob$children <- lapply(grob$children, edit_grob_colors, colfun, fillfun)
   }
 
+  if (methods::is(grob, "rastergrob")) {
+    grob <- edit_rastergrob_colors(grob, colfun)
+  }
+
   grob
 }
+
+
+# internal function that can adjust rastergrobs
+# important: it only changes the raster data, not
+# any of the other gp data.
+edit_rastergrob_colors <- function(grob, colfun)
+{
+  rasternew <- colfun(grob$raster)
+  dim(rasternew) <- dim(grob$raster)
+  class(rasternew) <- class(grob$raster)
+  grid::editGrob(grob, raster = rasternew)
+}
+
