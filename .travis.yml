@@ -1,5 +1,8 @@
 language: r
 cache: packages
 
+r_github_packages:
+  - wilkelab/cowplot
+
 after_success:
   - Rscript -e 'covr::codecov()'

@@ -41,7 +41,7 @@ test_that('grob trees', {
 test_that('gtables', {
   g <- grid::circleGrob(r = .3, gp = grid::gpar(col = '#FF0000', fill = '#0000FF'))
 
-  gt <- gtable::gtable(unit(c(2, 2, 2), "cm"), unit(c(2, 2, 2), "cm"))
+  gt <- gtable::gtable(grid::unit(c(2, 2, 2), "cm"), grid::unit(c(2, 2, 2), "cm"))
   gt <- gtable::gtable_add_grob(gt, g, 2, 2)
 
   to_white <- function(c) {"#FFFFFF"} # convert everything to white
