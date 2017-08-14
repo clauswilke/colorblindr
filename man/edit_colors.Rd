@@ -5,9 +5,9 @@
 \alias{edit_grob_colors}
 \title{Edit colors in existing plot or grid object}
 \usage{
-edit_colors(plot, colfun = passthrough, fillfun = colfun)
+edit_colors(plot, colfun = passthrough, fillfun = NULL)
 
-edit_grob_colors(grob, colfun = passthrough, fillfun = colfun)
+edit_grob_colors(grob, colfun, fillfun)
 }
 \arguments{
 \item{plot}{The plot or grid graphics object to edit. The function \code{edit_colors()} can
