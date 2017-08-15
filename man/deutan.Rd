@@ -4,7 +4,7 @@
 \alias{deutan}
 \alias{protan}
 \alias{tritan}
-\title{\code{deutan} converts colors using the protan model of colorblindness}
+\title{\code{deutan} converts colors using the deutan model of colorblindness}
 \usage{
 deutan(colors)
 
@@ -16,7 +16,7 @@ tritan(colors)
 \item{colors}{Vector of R colors to convert}
 }
 \description{
-\code{deutan} converts colors using the protan model of colorblindness
+\code{deutan} converts colors using the deutan model of colorblindness
 
 \code{protan} converts colors using the protan model of colorblindness
 

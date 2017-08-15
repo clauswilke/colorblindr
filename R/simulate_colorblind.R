@@ -8,9 +8,10 @@
 #' @keywords colors, palette, colorblind
 #' @export
 #' @examples
-#' simulate_colorblind_hex(
-#' #01a203, CVDMatrix[['tritanomaly100']])
+#' ## doesn't currently work
+#' # simulate_colorblind_hex("#01a203", tritanomaly_cvd['60'])
 #'
+#' @importFrom grDevices col2rgb
 simulate_colorblind_hex <- function(hex_str, cvd) {
     # algorithm from http://www.daltonize.org/
     print(hex_str)
@@ -75,11 +76,13 @@ simulate_colorblind_hex <- function(hex_str, cvd) {
 #'
 #' Generate a vector of hex colors color blindness
 #' @param col The color vector
+#' @param cvd A vector (3x3--9 values) specifying the color vision deficiency transform matrix
 #' @keywords colors, palette, colorblind
 #' @export
 #' @examples
-#' colorblindr.simulate_colorblind(
-#'  c("#005000","#008600","#00BB00"), tritanomaly['60'])
+#' ## doesn't currently work
+#' # simulate_colorblind(c("#005000","#008600","#00BB00"),
+#' #   tritanomaly['60'])
 
 simulate_colorblind <- function(col, cvd){
     return(as.vector(sapply(col, function(x)

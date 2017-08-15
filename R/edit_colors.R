@@ -8,6 +8,7 @@
 #' @param colfun The function used to edit colors (`col` in `gpar` objects).
 #' @param fillfun The function used to edit fill colors (`fill` in `gpar` objects).
 #'   By default the same as `colfun`.
+#' @param ... Other parameters to be given to functions colfun and fillfun.
 #' @examples
 #' library(ggplot2)
 #' library(colorspace) # for desaturate

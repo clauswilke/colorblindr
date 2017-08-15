@@ -12,7 +12,8 @@ Description: Provides a variety of functions that are helpful to simulate
   as usual.
 URL: https://github.com/clauswilke/colorblindr
 Depends:
-    R (>= 3.2)
+    R (>= 3.2),
+    grDevices
 Imports:
     cowplot (> 0.8.0),
     dichromat,

@@ -34,8 +34,13 @@ list <- structure(NA, class = "result")
   x
 }
 
+#' Color vision deficiency (cvd) conversion tables
+#' @name cvd
 
-
+#' @rdname cvd
+#' @format NULL
+#' @usage NULL
+#' @export
 protanomaly_cvd <- list(
   "0" = c( #Low red
     1.000000,  0.000000, -0.000000,
@@ -95,9 +100,10 @@ protanomaly_cvd <- list(
 
 )
 
-#' `deutanomaly_cvd` is a list of cvds
+#' @rdname cvd
+#' @format NULL
+#' @usage NULL
 #' @export
-
 deutanomaly_cvd <- list(
   "0" = c(
     1.000000,  0.000000, -0.000000,
@@ -155,6 +161,12 @@ deutanomaly_cvd <- list(
     -0.011820,  0.042940,  0.968881
   )
 )
+
+
+#' @rdname cvd
+#' @format NULL
+#' @usage NULL
+#' @export
 tritanomaly <- list(
   "0" = c(
     1.000000,  0.000000, -0.000000,
