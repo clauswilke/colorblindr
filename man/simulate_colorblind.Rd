@@ -9,15 +9,15 @@ simulate_colorblind(col, cvd)
 \arguments{
 \item{col}{The color vector}
 
-\item{cvd}{A vector (3x3--9 values) specifying the color vision deficiency transform matrix}
+\item{cvd}{A 3x3 matrix specifying the color vision deficiency transform matrix}
 }
 \description{
 Generate a vector of hex colors color blindness
 }
 \examples{
-## doesn't currently work
-# simulate_colorblind(c("#005000","#008600","#00BB00"),
-#   tritanomaly['60'])
+
+ simulate_colorblind(c("#005000","#008600","#00BB00"),
+ tritanomaly_cvd['6'][[1]])
 }
 \keyword{colorblind}
 \keyword{colors,}

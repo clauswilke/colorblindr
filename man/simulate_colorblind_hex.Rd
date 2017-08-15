@@ -4,21 +4,21 @@
 \alias{simulate_colorblind_hex}
 \title{Simulate colorblindness for a hex color given a cvd transform matrix}
 \usage{
-simulate_colorblind_hex(hex_str, cvd)
+simulate_colorblind_hex(col, cvd)
 }
 \arguments{
-\item{hex_str}{The hex color string, e.g., '#FF0000'}
+\item{col}{The hex color string, e.g., '#FF0000'}
 
-\item{cvd}{A vector (3x3--9 values) specifying the color vision deficiency transform matrix}
+\item{cvd}{A 3x3 matrix specifying the color vision deficiency transform matrix}
 }
 \description{
 Generate a hex color simulating colorblindness.
-Algorithm from http://www.daltonize.org/.
-Code from https://github.com/muppetjones/remcolor/blob/master/R/SimulateColorBlind.R
+Daltonization algorithm from http://www.daltonize.org/.
+Aided by https://github.com/muppetjones/remcolor/blob/master/R/SimulateColorBlind.R
 }
 \examples{
 ## doesn't currently work
-# simulate_colorblind_hex("#01a203", tritanomaly_cvd['60'])
+# simulate_colorblind_hex("#01a203", tritanomaly_cvd['6'][[1]])
 
 }
 \keyword{colorblind}
