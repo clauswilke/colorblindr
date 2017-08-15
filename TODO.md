@@ -10,4 +10,3 @@ TODO
   https://github.com/njsmith/colorspacious/blob/master/colorspacious/cvd.py
   )
 - Write a better vignette
-- Write a shiny app for interactive exploration of different types of colorblindness
