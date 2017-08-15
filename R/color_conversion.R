@@ -25,5 +25,7 @@ deutanomaly <- function(colors, sev='30') simulate_colorblind(colors, cvd=deutan
 
 #' `desaturate` turns colors into their gray values
 #' @param col Vector of colors to convert
+#' @param rel_chroma Degree of desaturation. 0=complete, 1=none.
+#' @importFrom colorspace desaturate
 #' @export
 desaturate <- colorspace::desaturate

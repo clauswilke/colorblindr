@@ -13,16 +13,16 @@ Description: Provides a variety of functions that are helpful to simulate
 URL: https://github.com/clauswilke/colorblindr
 Depends:
     R (>= 3.2),
-    grDevices
+    grDevices,
+    colorspace (>= 99.0)
 Imports:
     cowplot (> 0.8.0),
     dichromat,
     shiny (>= 1.0.0),
     methods
-License: MIT | file LICENSE
+License: MIT + file LICENSE
 LazyData: true
 Suggests:
-    colorspace,
     covr,
     ggplot2,
     gtable,
