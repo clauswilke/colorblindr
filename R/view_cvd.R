@@ -46,7 +46,9 @@ sidebarPanel <- function() {
     shiny::selectInput("variable", "Simulation type:",
                        list("Original",
                             "Desaturated",
-                            "Deutan (red/green)"))
+                            "Deutan (red/green)",
+                            "Protan (red/green)",
+                            "Tritan (blue/green)"))
   )
 }
 
@@ -80,7 +82,9 @@ cvdServer <- function(plot) {
       # convert simulation choice into function name
       fun_text = list("Original" = "passthrough",
                       "Desaturated" = "desaturate",
-                      "Deutan (red/green)" = "deutan")[simul_choice()]
+                      "Deutan (red/green)" = "deutan",
+                      "Protan (red/green)" = "protan",
+                      "Tritan (blue/green)" = "tritan")[simul_choice()]
 
       # convert function name into actual function
       colfun <- eval(parse(text=fun_text))

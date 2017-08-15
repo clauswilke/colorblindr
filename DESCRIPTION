@@ -19,7 +19,7 @@ Imports:
     dichromat,
     shiny (>= 1.0.0),
     methods
-License: GPL-2 | file LICENSE
+License: MIT | file LICENSE
 LazyData: true
 Suggests:
     colorspace,
