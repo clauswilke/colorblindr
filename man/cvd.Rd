@@ -5,7 +5,7 @@
 \alias{cvd}
 \alias{protanomaly_cvd}
 \alias{deutanomaly_cvd}
-\alias{tritanomaly}
+\alias{tritanomaly_cvd}
 \title{Color vision deficiency (cvd) conversion tables}
 \description{
 Color vision deficiency (cvd) conversion tables

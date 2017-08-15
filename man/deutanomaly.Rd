@@ -4,7 +4,7 @@
 \alias{deutanomaly}
 \title{\code{deutanomaly} converts colors using the deutanomaly model of colorblindness}
 \usage{
-deutanomaly(colors, sev = "30")
+deutanomaly(colors, sev = "3")
 }
 \arguments{
 \item{colors}{Vector of colors to convert}

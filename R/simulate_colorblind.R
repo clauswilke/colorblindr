@@ -1,92 +1,102 @@
 #' Simulate colorblindness for a hex color given a cvd transform matrix
 #'
 #' Generate a hex color simulating colorblindness.
-#' Algorithm from http://www.daltonize.org/.
-#' Code from https://github.com/muppetjones/remcolor/blob/master/R/SimulateColorBlind.R
-#' @param hex_str The hex color string, e.g., '#FF0000'
-#' @param cvd A vector (3x3--9 values) specifying the color vision deficiency transform matrix
+#' Daltonization algorithm from http://www.daltonize.org/.
+#' Aided by https://github.com/muppetjones/remcolor/blob/master/R/SimulateColorBlind.R
+#' @param col The hex color string, e.g., '#FF0000'
+#' @param cvd A 3x3 matrix specifying the color vision deficiency transform matrix
 #' @keywords colors, palette, colorblind
 #' @export
 #' @examples
 #' ## doesn't currently work
-#' # simulate_colorblind_hex("#01a203", tritanomaly_cvd['60'])
+#' # simulate_colorblind_hex("#01a203", tritanomaly_cvd['6'][[1]])
 #'
 #' @importFrom grDevices col2rgb
-simulate_colorblind_hex <- function(hex_str, cvd) {
-    # algorithm from http://www.daltonize.org/
-    print(hex_str)
-    print(cvd)
-    # init vars for lintr
-    cvd_a <- cvd_b <- cvd_c <- 0
-    cvd_d <- cvd_e <- cvd_f <- 0
-    cvd_g <- cvd_h <- cvd_i <- 0
-    r <- g <- b <- 0
+simulate_colorblind_hex <- function(col, cvd) {
+  print(col)
+  #From desaturate
+  alpha <- ""
+  if (is.character(col) && (all(substr(col, 1L, 1L) == "#") &
+                            all(nchar(col) %in% c(7L, 9L)))) {
+    alpha <- substr(col, 8L, 9L)
+    col <- substr(col, 1L, 7L)
+    rgb_mat <- col2rgb(col)
+  }
+  else {
+    rgb_mat <- col2rgb(col)
+    #col <- col2rgb(col, alpha = TRUE)
+    #alpha <- format(as.hexmode(col[4L, ]), width = 2L, upper.case = TRUE)
+    #alpha[alpha == "FF"] <- ""
+    #rgb_mat <- rgb(t(col[1L:3L, ])/255)
+  }
 
-    # break apart the vectors
-    list[cvd_a, cvd_b, cvd_c, cvd_d, cvd_e, cvd_f, cvd_g, cvd_h, cvd_i] <- cvd
-    list[r, g, b] <- col2rgb(hex_str)
 
-    # RGB to LMS matrix conversion
-    L <- (17.8824 * r) + (43.5161 * g) + (4.11935 * b)
-    M <- (3.45565 * r) + (27.1554 * g) + (3.86714 * b)
-    S <- (0.0299566 * r) + (0.184309 * g) + (1.46709 * b)
+  print(cvd)
+  rgb_lms_conv <- matrix(c(17.8824,43.5161,4.11935,
+                           3.45565,27.1554,3.86714,
+                           0.0299566,0.184309,1.46709),
+                         3,3, byrow=TRUE)
 
-    # Simulate color blindness
-    l <- (cvd_a * L) + (cvd_b * M) + (cvd_c * S)
-    m <- (cvd_d * L) + (cvd_e * M) + (cvd_f * S)
-    s <- (cvd_g * L) + (cvd_h * M) + (cvd_i * S)
+  #Convert RGB to LMS
+  LMS <- rgb_lms_conv %*% rgb_mat
 
-    # LMS to RGB matrix conversion
-    R <- (0.0809444479 * l) + (-0.130504409 * m) + (0.116721066 * s)
-    G <- (-0.0102485335 * l) + (0.0540193266 * m) + (-0.113614708 * s)
-    B <- (-0.000365296938 * l) + (-0.00412161469 * m) + (0.693511405 * s)
+  # Scale color blindness
+  lms <- cvd %*% LMS
 
-    # Isolate invisible colors to color vision deficiency
-    # (calculate error matrix)
-    R <- r - R
-    G <- g - G
-    B <- b - B
+  lms_rgb_conv <- matrix(c(0.0809444479,-0.130504409,0.116721066,
+                           -0.0102485335,0.0540193266,-0.113614708,
+                           -0.000365296938,0.00412161469,0.693511405),
+                         3,3, byrow=TRUE)
 
-    # Shift colors towards visible spectrum (apply error modifications)
-    RR <- (0.0 * R) + (0.0 * G) + (0.0 * B)
-    GG <- (0.7 * R) + (1.0 * G) + (0.0 * B)
-    BB <- (0.7 * R) + (0.0 * G) + (1.0 * B)
 
-    # Add compensation to original values
-    R <- RR + r
-    G <- GG + g
-    B <- BB + b
+  #Convert LMS to RGB
+  RGB <- lms_rgb_conv %*% lms
 
-    # Clamp values
-    if (R < 0)  R <- 0
-    if (R > 255) R <- 255
-    if (G < 0) G <- 0
-    if (G > 255) G <- 255
-    if (B < 0) B <- 0
-    if (B > 255) B <- 255
+  #daltonization algorithm from http://www.daltonize.org/
+  #Daltonization portion (Used by colorblind people to make indistinguishable images more distinguishable)
+  #  # Isolate invisible colors to color vision deficiency
+  #  # (calculate error matrix)
+  #  RGB <- rgb_mat - RGB
 
-    R <- as.integer(R)
-    G <- as.integer(G)
-    B <- as.integer(B)
+  #  error_mods <- matrix(c(0.0, 0.0, 0.0,
+  #                         0.7, 1.0, 0.0,
+  #                         0.7, 0.0, 1.0),
+  #                       3,3, byrow=TRUE)
 
-    return(sprintf("#%02x%02x%02x", R, G, B))
+  #  # Apply error modification
+  #  RRGGBB <- error_mods %*% RGB
+
+  #  # Add compensation to original values
+
+  #  RGB <- RRGGBB + rgb
+
+  #  # RGB values must be between 0 and 255
+  RGB[RGB<0]=0
+  RGB[RGB>255]=255
+
+  #
+  rgb2hex <- function(RGB) rgb(RGB[1,], RGB[2,], RGB[3,], maxColorValue = 255)
+
+  final_hex <- paste(rgb2hex(RGB), alpha, sep="")
+  print(final_hex)
+  return(final_hex)
 }
 
 #' Apply colorblindness tranformation to a vector of hex values
 #'
 #' Generate a vector of hex colors color blindness
 #' @param col The color vector
-#' @param cvd A vector (3x3--9 values) specifying the color vision deficiency transform matrix
+#' @param cvd A 3x3 matrix specifying the color vision deficiency transform matrix
 #' @keywords colors, palette, colorblind
 #' @export
 #' @examples
-#' ## doesn't currently work
-#' # simulate_colorblind(c("#005000","#008600","#00BB00"),
-#' #   tritanomaly['60'])
+#'
+#'  simulate_colorblind(c("#005000","#008600","#00BB00"),
+#'  tritanomaly_cvd['6'][[1]])
 
 simulate_colorblind <- function(col, cvd){
-    return(as.vector(sapply(col, function(x)
-        simulate_colorblind_hex(x, cvd))
-    ))
+  return(as.vector(sapply(col, function(x)
+    simulate_colorblind_hex(x, cvd))
+  ))
 }
 
