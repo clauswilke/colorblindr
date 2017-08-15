@@ -43,14 +43,14 @@ cvdUI <- function(plot) {
 sidebarPanel <- function() {
   # sidebar with controls to select the simulation choice
   shiny::sidebarPanel(
-    shiny::selectInput("variable", "Simulation type:",
-                       list("Original",
-                            "Desaturated",
+    shiny::selectInput("variable", "Simulation type",
+                       list("Desaturated",
                             "Deutan (red/green)",
                             "Protan (red/green)",
-                            "Tritan (blue/green)")),
-    shiny::sliderInput("sev", "Severity:",
-                min = 0, max = 1, value = .8)
+                            "Tritan (blue/green)",
+                            "Original")),
+    shiny::sliderInput("sev", "Severity",
+                min = 0, max = 1, value = .95)
   )
 }
 
