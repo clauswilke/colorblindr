@@ -48,7 +48,9 @@ sidebarPanel <- function() {
                             "Desaturated",
                             "Deutan (red/green)",
                             "Protan (red/green)",
-                            "Tritan (blue/green)"))
+                            "Tritan (blue/green)")),
+    shiny::sliderInput("sev", "Severity:",
+                min = 0, max = 1, value = .8)
   )
 }
 
@@ -79,15 +81,14 @@ cvdServer <- function(plot) {
 
     # generate plot with modified colors
     output$plot <- shiny::renderPlot({
-      # convert simulation choice into function name
-      fun_text = list("Original" = "passthrough",
-                      "Desaturated" = "desaturate",
-                      "Deutan (red/green)" = "deutan",
-                      "Protan (red/green)" = "protan",
-                      "Tritan (blue/green)" = "tritan")[simul_choice()]
-
-      # convert function name into actual function
-      colfun <- eval(parse(text=fun_text))
+      # convert simulation choice into function call
+      colfun = switch(simul_choice(),
+                      `Desaturated` = function(c)
+                        desaturate(c, rel_chroma = 1-input$sev),
+                      `Deutan (red/green)` = deutan,
+                      `Protan (red/green)` = protan,
+                      `Tritan (blue/green)` = tritan,
+                      passthrough)
 
       # draw the modified plot
       grid::grid.draw(edit_colors(plot, colfun = colfun))
