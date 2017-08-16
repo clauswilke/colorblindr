@@ -19,7 +19,7 @@ Aided by https://github.com/muppetjones/remcolor/blob/master/R/SimulateColorBlin
 \examples{
 
  simulate_colorblind(c("#005000","#008600","#00BB00"),
- tritanomaly_cvd['6'])
+ tritanomaly_cvd['6'][[1]])
 
 }
 \keyword{colorblind}

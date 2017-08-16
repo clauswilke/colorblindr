@@ -10,7 +10,7 @@
 #' @examples
 #'
 #'  simulate_colorblind(c("#005000","#008600","#00BB00"),
-#'  tritanomaly_cvd['6'])
+#'  tritanomaly_cvd['6'][[1]])
 #'
 #' @importFrom grDevices col2rgb
 simulate_colorblind <- function(col, cvd) {
@@ -36,7 +36,7 @@ simulate_colorblind <- function(col, cvd) {
         }
 
         # Scale color blindness
-        RGB <- cvd[[1]] %*% col
+        RGB <- cvd %*% col
         RGB[RGB<0]=0
         RGB[RGB>255]=255
 
