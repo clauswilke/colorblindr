@@ -2,7 +2,7 @@
 % Please edit documentation in R/color_conversion.R
 \name{desaturate}
 \alias{desaturate}
-\title{\code{desaturate} turns colors into their gray values}
+\title{Turn colors into their gray values}
 \usage{
 desaturate(col, rel_chroma = 0)
 }
@@ -12,5 +12,5 @@ desaturate(col, rel_chroma = 0)
 \item{rel_chroma}{Degree of desaturation. 0=complete, 1=none.}
 }
 \description{
-\code{desaturate} turns colors into their gray values
+Turn colors into their gray values
 }
