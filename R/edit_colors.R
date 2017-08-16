@@ -15,8 +15,8 @@
 #' p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
 #'   geom_density(alpha = 0.7)
 #'
-#' p2 <- edit_colors(p, deutanomaly)
-#' p3 <- edit_colors(p, tritan)
+#' p2 <- edit_colors(p, deutan7)
+#' p3 <- edit_colors(p, tritan10)
 #' p4 <- edit_colors(p, desaturate)
 #' cowplot::plot_grid(p, p2, p3, p4)
 #' @export

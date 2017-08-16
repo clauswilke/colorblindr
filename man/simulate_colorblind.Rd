@@ -2,22 +2,25 @@
 % Please edit documentation in R/simulate_colorblind.R
 \name{simulate_colorblind}
 \alias{simulate_colorblind}
-\title{Apply colorblindness tranformation to a vector of hex values}
+\title{Simulate colorblindness for a hex color given a cvd transform matrix}
 \usage{
 simulate_colorblind(col, cvd)
 }
 \arguments{
-\item{col}{The color vector}
+\item{col}{The hex color string, e.g., '#FF0000'}
 
 \item{cvd}{A 3x3 matrix specifying the color vision deficiency transform matrix}
 }
 \description{
-Generate a vector of hex colors color blindness
+Generate a hex color simulating colorblindness.
+Daltonization algorithm from http://www.daltonize.org/.
+Aided by https://github.com/muppetjones/remcolor/blob/master/R/SimulateColorBlind.R
 }
 \examples{
 
  simulate_colorblind(c("#005000","#008600","#00BB00"),
- tritanomaly_cvd['6'][[1]])
+ tritanomaly_cvd['6'])
+
 }
 \keyword{colorblind}
 \keyword{colors,}

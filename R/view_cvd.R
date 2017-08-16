@@ -85,9 +85,14 @@ cvdServer <- function(plot) {
       colfun = switch(simul_choice(),
                       `Desaturated` = function(c)
                         desaturate(c, rel_chroma = 1-input$sev),
-                      `Deutan (red/green)` = deutan,
-                      `Protan (red/green)` = protan,
-                      `Tritan (blue/green)` = tritan,
+                      `Deutan (red/green)` = function(c)
+                        simulate_colorblind(c, cvd=deutanomaly_cvd[10*input$sev]),
+
+                      `Protan (red/green)`= function(c)
+                        simulate_colorblind(c, cvd=protanomaly_cvd[10*input$sev]),
+
+                      `Tritan (blue/green)`= function(c)
+                        simulate_colorblind(c, cvd=tritanomaly_cvd[10*input$sev]),
                       passthrough)
 
       # draw the modified plot

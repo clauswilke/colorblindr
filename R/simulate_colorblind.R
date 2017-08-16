@@ -16,7 +16,6 @@
 simulate_colorblind <- function(col, cvd) {
     return(as.vector(sapply(col, function(x){
 
-        print(col)
         #Adapted from desaturate
         alpha <- ""
 
@@ -28,7 +27,6 @@ simulate_colorblind <- function(col, cvd) {
         }
         else {
           col <- grDevices::col2rgb(col, alpha = TRUE)
-          print(col)
           ## extract alpha values (if non-FF)
           alpha <- format(as.hexmode(col[4L, ]), width = 2L, upper.case = TRUE)
           alpha[alpha == "FF"] <- ""
@@ -45,7 +43,6 @@ simulate_colorblind <- function(col, cvd) {
         rgb2hex <- function(RGB) rgb(RGB[1,], RGB[2,], RGB[3,], maxColorValue = 255)
 
         final_hex <- paste(rgb2hex(RGB), alpha, sep="")
-        print(final_hex)
         return(final_hex)
 
 
