@@ -20,7 +20,7 @@ tritan <- function(colors) dichromat::dichromat(colors, type = "tritan")
 #' @param colors Vector of colors to convert
 #' @param sev Severity of the color vision defect
 #' @export
-deutanomaly <- function(colors, sev='3') simulate_colorblind(colors, cvd=deutanomaly_cvd[sev][[1]])
+deutanomaly <- function(colors, sev='6') simulate_colorblind(colors, cvd=deutanomaly_cvd[sev])
 
 #' `desaturate` turns colors into their gray values
 #' @param col Vector of colors to convert
