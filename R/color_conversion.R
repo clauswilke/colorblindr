@@ -6,15 +6,6 @@
 #' @export
 desaturate <- colorspace::desaturate
 
-#' Convert colors using the deutan model of colorblindness
-#'
-#' @param colors Vector of colors to convert
-#' @param sev Severity of the color vision defect, a number between 0 and 1
-#' @export
-deutan <- function(colors, sev = 1) {
-  simulate_colorblind(colors, cvd=deutan_transform(sev))
-}
-
 #' Generate color transformation matrices using the deutan model of colorblindness
 #'
 #' @param sev Severity of the color vision defect, a number between 0 and 1

@@ -2,24 +2,15 @@
 % Please edit documentation in R/color_conversion.R
 \name{deutan}
 \alias{deutan}
-\alias{deutan}
 \title{Convert colors using the deutan model of colorblindness}
 \usage{
-deutan(colors, sev = 1)
-
 deutan(colors, sev = 1)
 }
 \arguments{
 \item{colors}{Vector of colors to convert}
 
 \item{sev}{Severity of the color vision defect, a number between 0 and 1}
-
-\item{colors}{Vector of colors to convert}
-
-\item{sev}{Severity of the color vision defect, a number between 0 and 1}
 }
 \description{
-Convert colors using the deutan model of colorblindness
-
 Convert colors using the deutan model of colorblindness
 }
