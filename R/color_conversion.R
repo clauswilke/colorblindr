@@ -5,6 +5,31 @@
 #' @export
 desaturate <- colorspace::desaturate
 
+#' `deutan` converts colors using the deutan model of colorblindness
+#'
+#' @param colors Vector of colors to convert
+#' @param sev Severity of the color vision defect, a number between 0 and 1
+#' @export
+deutan <- function(colors, sev=1){
+  if (sev <= 0) {
+    cvd <- deutanomaly_cvd[[1]]
+  } else if (sev >= 1) {
+    cvd <- deutanomaly_cvd[[11]]
+  } else {
+    s <- 10*sev
+    i1 <- floor(s)
+    i2 <- ceiling(s)
+    if (i1 == i2) {
+      cvd <- deutanomaly_cvd[[i1]]
+    }
+    else {
+      cvd <- (i2-s)*deutanomaly_cvd[[i1+1]] + (s-i1)*deutanomaly_cvd[[i2+1]]
+    }
+  }
+
+  simulate_colorblind(colors, cvd=list(cvd))
+}
+
 #' `deutan1` converts colors using the deutan model of colorblindness (low severity)
 #'
 #' @param colors Vector of colors to convert

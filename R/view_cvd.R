@@ -86,7 +86,7 @@ cvdServer <- function(plot) {
                       `Desaturated` = function(c)
                         desaturate(c, rel_chroma = 1-input$sev),
                       `Deutan (red/green)` = function(c)
-                        simulate_colorblind(c, cvd=deutanomaly_cvd[10*input$sev]),
+                        deutan(c, input$sev),
 
                       `Protan (red/green)`= function(c)
                         simulate_colorblind(c, cvd=protanomaly_cvd[10*input$sev]),
