@@ -2,6 +2,8 @@
 #'
 #' @param plot The plot to modify
 #' @param severity The severity of the simulation, applied equally to all four cases
+#' @examples
+#' cvd_grid(palette_plot(palette_OkabeIto, color_labels = FALSE))
 #' @export
 cvd_grid <- function(plot, severity = 1)
 {
@@ -14,7 +16,7 @@ cvd_grid <- function(plot, severity = 1)
   trit <- function(c) simulate_cvd(c, tritan_transform(severity))
   p3 <- edit_colors(plot, trit)
 
-  des <- function(c) desaturate(c, 1-severity)
+  des <- function(c) desaturate(c, severity)
   p4 <- edit_colors(plot, des)
 
   cowplot::plot_grid(p1, p2, p3, p4, scale = 0.9) +
