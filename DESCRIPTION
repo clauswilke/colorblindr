@@ -38,7 +38,9 @@ Collate:
     'cvd.R'
     'cvd_grid.R'
     'edit_colors.R'
+    'scales.R'
     'simulate_cvd.R'
+    'palettes.R'
     'utils.R'
     'view_cvd.R'
 RoxygenNote: 6.0.1
