@@ -6,11 +6,6 @@
 \alias{scale_fill_OkabeIto}
 \alias{scale_OkabeIto}
 \title{Okabe Ito color scale}
-\usage{
-scale_colour_OkabeIto(...)
-
-scale_fill_OkabeIto(...)
-}
 \arguments{
 \item{use_black}{If \code{TRUE}, scale includes black, otherwise includes gray.}
 }
@@ -18,8 +13,9 @@ scale_fill_OkabeIto(...)
 See \link{palette_OkabeIto} for details on the color palette used.
 }
 \examples{
+library(ggplot2)
 ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
   geom_point() + scale_color_OkabeIto()
 ggplot(iris, aes(Sepal.Length, fill = Species)) +
-  geom_density(alpha = 0.7) + scale_color_OkabeIto()
+  geom_density(alpha = 0.7) + scale_fill_OkabeIto()
 }

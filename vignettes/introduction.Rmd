@@ -77,9 +77,10 @@ plot_grid(p, p2, p3, p4, nrow=1)
 Applying simulations to images accurately conveys whether color coding schemes will be distiguishable with the most common forms of color vision deficiency. Seeing how an image looks hopefully will inspire better choices of color schemes for images. 
 ```{r}
 library(magick)
-p <- ggdraw()# + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
+p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
 p2 <- edit_colors(p, deutan, sev = .7)
 plot_grid(p, p2, nrow=1)
+
 
 ```
 
