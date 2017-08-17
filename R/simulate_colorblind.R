@@ -14,41 +14,34 @@
 #'
 #' @importFrom grDevices col2rgb
 simulate_colorblind <- function(col, cvd) {
-    return(as.vector(sapply(col, function(x){
+  #Adapted from desaturate
+  alpha <- ""
 
-        #Adapted from desaturate
-        alpha <- ""
+  if (is.character(col) && (all(substr(col, 1L, 1L) == "#") &
+                            all(nchar(col) %in% c(7L, 9L)))) {
+    alpha <- substr(col, 8L, 9L)
+    col <- substr(col, 1L, 7L)
+    col <- grDevices::col2rgb(col)
+  }
+  else {
+    col <- grDevices::col2rgb(col, alpha = TRUE)
+    ## extract alpha values (if non-FF)
+    alpha <- format(as.hexmode(col[4L, ]), width = 2L, upper.case = TRUE)
+    alpha[alpha == "FF"] <- ""
+    ## retain only RGB
+    col <- col[1L:3L,]
 
-        if (is.character(col) && (all(substr(col, 1L, 1L) == "#") &
-                                  all(nchar(col) %in% c(7L, 9L)))) {
-          alpha <- substr(col, 8L, 9L)
-          col <- substr(col, 1L, 7L)
-          col <- grDevices::col2rgb(col)
-        }
-        else {
-          col <- grDevices::col2rgb(col, alpha = TRUE)
-          ## extract alpha values (if non-FF)
-          alpha <- format(as.hexmode(col[4L, ]), width = 2L, upper.case = TRUE)
-          alpha[alpha == "FF"] <- ""
-          ## retain only RGB
-          col <- col[1L:3L,]
+  }
 
-        }
+  # Scale color blindness
+  RGB <- cvd %*% col
+  RGB[RGB<0]=0
+  RGB[RGB>255]=255
 
-        # Scale color blindness
-        RGB <- cvd %*% col
-        RGB[RGB<0]=0
-        RGB[RGB>255]=255
+  rgb2hex <- function(RGB) rgb(RGB[1,], RGB[2,], RGB[3,], maxColorValue = 255)
 
-        rgb2hex <- function(RGB) rgb(RGB[1,], RGB[2,], RGB[3,], maxColorValue = 255)
-
-        final_hex <- paste(rgb2hex(RGB), alpha, sep="")
-        return(final_hex)
-
-
-        }
-
-    )))
+  final_hex <- paste(rgb2hex(RGB), alpha, sep="")
+  return(final_hex)
 }
 
 
