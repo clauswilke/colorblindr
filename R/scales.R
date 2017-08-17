@@ -36,6 +36,7 @@ scale_fill_OkabeIto <- function(...) {
 #' See [palette_OkabeIto] for details on the color palette used.
 #' @param use_black If `TRUE`, scale includes black, otherwise includes gray.
 #' @examples
+#' library(ggplot2)
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
 #'   geom_point() + scale_color_OkabeIto()
 #' ggplot(iris, aes(Sepal.Length, fill = Species)) +
