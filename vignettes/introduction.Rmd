@@ -24,17 +24,17 @@ We simulate color vision deficiencies using the algorithms from Machado 2009, "A
 Make a figure:
 
 ```{r}
-library(ggplot2)
-library(cowplot)
+library(cowplot) # also loads ggplot2
 library(colorspace) # for desaturate
+library(colorblindr)
 
 p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
   geom_density(alpha = 0.7)
 
-p2 <- edit_colors(p, deutan, sev=10)
-p3 <- edit_colors(p, protan, sev = 10)
-p4 <- edit_colors(p, tritan, sev = 10)
-cowplot::plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan10", "Protan10", "Tritan10"))
+p2 <- edit_colors(p, deutan, sev = 1)
+p3 <- edit_colors(p, protan, sev = 1)
+p4 <- edit_colors(p, tritan, sev = 1)
+plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan10", "Protan10", "Tritan10"))
 ```
 
 Simulate the more common, less severe color vision deficiencies by lowering `sev`.
@@ -44,32 +44,32 @@ Simulate the more common, less severe color vision deficiencies by lowering `sev
 p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
   geom_density(alpha = 0.7)
 
-p2 <- edit_colors(p, deutan, sev=5)
-p3 <- edit_colors(p, protan, sev = 5)
-p4 <- edit_colors(p, tritan, sev = 5)
-cowplot::plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan5", "Protan5", "Tritan5"))
+p2 <- edit_colors(p, deutan, sev = .5)
+p3 <- edit_colors(p, protan, sev = .5)
+p4 <- edit_colors(p, tritan, sev = .5)
+plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan5", "Protan5", "Tritan5"))
 ```
 
 
 Or make a desaturated version:
 ```{r}
 
-p2 <- edit_colors(p, desaturate, rel_chroma=3)
-p3 <- edit_colors(p, desaturate, rel_chroma=6)
-p4 <- edit_colors(p, desaturate, rel_chroma=10)
+p2 <- edit_colors(p, desaturate, rel_chroma = .3)
+p3 <- edit_colors(p, desaturate, rel_chroma = .6)
+p4 <- edit_colors(p, desaturate, rel_chroma = 1)
 
-cowplot::plot_grid(p, p2, p3, p4)
+plot_grid(p, p2, p3, p4)
 ```
 
 We can use the library `magick` to convert images to ggplot objects and edit colors. 
 ```{r}
 library(magick)
 p <- ggdraw() + draw_image("HSV-color-wheel.png") # turn png into ggplot object
-p2 <- edit_colors(p, deutan, sev=3)
-p3 <- edit_colors(p, deutan, sev = 7)
-p4 <- edit_colors(p, deutan, sev = 10)
+p2 <- edit_colors(p, deutan, sev = .3)
+p3 <- edit_colors(p, deutan, sev = .7)
+p4 <- edit_colors(p, deutan, sev = 1)
 
-cowplot::plot_grid(p, p2,p3,p4, nrow=1)
+plot_grid(p, p2, p3, p4, nrow=1)
 
 ```
 
@@ -77,9 +77,9 @@ cowplot::plot_grid(p, p2,p3,p4, nrow=1)
 Applying simulations to images accurately conveys whether color coding schemes will be distiguishable with the most common forms of color vision deficiency. Seeing how an image looks hopefully will inspire better choices of color schemes for images. 
 ```{r}
 library(magick)
-p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
-p2 <- edit_colors(p, deutan, sev = 7)
-cowplot::plot_grid(p, p2, nrow=1)
+p <- ggdraw()# + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
+p2 <- edit_colors(p, deutan, sev = .7)
+plot_grid(p, p2, nrow=1)
 
 ```
 
