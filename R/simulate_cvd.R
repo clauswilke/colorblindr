@@ -1,26 +1,28 @@
-#' Simulate colorblindness for a hex color given a cvd transform matrix
+#' Simulate color vision deficiency given a cvd transform matrix
 #'
-#' Generate a hex color simulating colorblindness.
-#' @param col The hex color string, e.g., '#FF0000'
-#' @param cvd A 3x3 matrix specifying the color vision deficiency transform matrix
-#' @keywords colors, palette, colorblind
+#' This function takes valid R colors and transforms them according to a cvd transform matrix.
+#' @param col A color or vector of colors e.g., "#FFA801" or "blue"
+#' @param cvd_transform A 3x3 matrix specifying the color vision deficiency transform matrix
+#' @keywords colors, cvd, colorblind
 #' @export
 #' @examples
 #'
-#'  simulate_cvd(c("#005000","#008600","#00BB00"),
+#'  simulate_cvd(c("#005000","blue","#00BB00"),
 #'  tritanomaly_cvd['6'][[1]])
 #'
 #' @importFrom grDevices col2rgb
 simulate_cvd <- function(col, cvd_transform) {
   #Adapted from desaturate
-  alpha <- ""
 
+  #If all hex
   if (is.character(col) && (all(substr(col, 1L, 1L) == "#") &
                             all(nchar(col) %in% c(7L, 9L)))) {
+    #Save transparency value for later
     alpha <- substr(col, 8L, 9L)
     col <- substr(col, 1L, 7L)
     col <- grDevices::col2rgb(col)
   }
+  #If contains built in color..,
   else {
     col <- grDevices::col2rgb(col, alpha = TRUE)
     ## extract alpha values (if non-FF)
@@ -31,11 +33,14 @@ simulate_cvd <- function(col, cvd_transform) {
 
   }
 
-  # Scale color blindness
+  # Transform color
   RGB <- cvd_transform %*% col
+
+  # Bound RGB values
   RGB[RGB<0]=0
   RGB[RGB>255]=255
 
+  # Convert back to hex
   rgb2hex <- function(RGB) rgb(RGB[1,], RGB[2,], RGB[3,], maxColorValue = 255)
 
   final_hex <- paste(rgb2hex(RGB), alpha, sep="")
