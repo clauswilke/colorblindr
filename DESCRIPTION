@@ -27,6 +27,8 @@ Suggests:
     ggplot2,
     gtable,
     knitr,
+    magick,
+    rmarkdown,
     testthat,
     vdiffr,
     viridis
