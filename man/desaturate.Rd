@@ -4,12 +4,12 @@
 \alias{desaturate}
 \title{Turn colors into their gray values}
 \usage{
-desaturate(col, rel_chroma = 0)
+desaturate(col, amount = 1)
 }
 \arguments{
 \item{col}{Vector of colors to convert}
 
-\item{rel_chroma}{Degree of desaturation. 0=complete, 1=none.}
+\item{amount}{Degree of desaturation. 1=complete, 0=none.}
 }
 \description{
 Turn colors into their gray values

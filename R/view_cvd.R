@@ -84,7 +84,7 @@ cvdServer <- function(plot) {
       # convert simulation choice into function call
       colfun = switch(simul_choice(),
                       `Desaturated` = function(c)
-                        desaturate(c, rel_chroma = 1-input$sev),
+                        desaturate(c, amount = input$sev),
 
                       # here and below, precalculate matrix for increase
                       # in speed for figures with many colors

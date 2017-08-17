@@ -1,7 +1,7 @@
 #' Turn colors into their gray values
 #'
 #' @param col Vector of colors to convert
-#' @param rel_chroma Degree of desaturation. 0=complete, 1=none.
+#' @param amount Degree of desaturation. 1=complete, 0=none.
 #' @importFrom colorspace desaturate
 #' @export
 desaturate <- colorspace::desaturate

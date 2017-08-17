@@ -54,9 +54,9 @@ plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan5", "Protan5", "Tritan5")
 Or make a desaturated version:
 ```{r}
 
-p2 <- edit_colors(p, desaturate, rel_chroma = .3)
-p3 <- edit_colors(p, desaturate, rel_chroma = .6)
-p4 <- edit_colors(p, desaturate, rel_chroma = 1)
+p2 <- edit_colors(p, desaturate, amount = .3)
+p3 <- edit_colors(p, desaturate, amount = .6)
+p4 <- edit_colors(p, desaturate, amount = 1)
 
 plot_grid(p, p2, p3, p4)
 ```

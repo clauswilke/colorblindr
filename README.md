@@ -10,10 +10,10 @@ Simulate colorblindness in production-ready R figures. Written by Claire D. McWh
 Installation
 ============
 
-This package depends on the development version of **cowplot** and on a patched version of **colorspace**. Please install those packages first:
+This package depends on the development versions of **cowplot** and **colorspace**. Please install those packages first:
 
     devtools::install_github("wilkelab/cowplot")
-    devtools::install_github("clauswilke/colorspace")
+    install.packages("colorspace", repos = "http://R-Forge.R-project.org")
 
 Then install **colorblindr**:
 
