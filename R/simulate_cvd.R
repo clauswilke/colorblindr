@@ -41,7 +41,7 @@ simulate_cvd <- function(col, cvd_transform) {
   RGB[RGB>255]=255
 
   # Convert back to hex
-  rgb2hex <- function(RGB) rgb(RGB[1,], RGB[2,], RGB[3,], maxColorValue = 255)
+  rgb2hex <- function(RGB) grDevices::rgb(RGB[1,], RGB[2,], RGB[3,], maxColorValue = 255)
 
   final_hex <- paste(rgb2hex(RGB), alpha, sep="")
   return(final_hex)

@@ -20,8 +20,6 @@ knitr::opts_chunk$set(
 
 Simulate colorblindness in production-ready R figures. Written by Claire D. McWhite and Claus O. Wilke.
 
-This is an experimental package in early development. Don't expect anything to work.
-
 # Installation
 
 This package depends on the development version of **cowplot** and on a patched version of **colorspace**. Please install those packages first:
@@ -33,4 +31,24 @@ devtools::install_github("clauswilke/colorspace")
 Then install **colorblindr**:
 ```
 devtools::install_github("clauswilke/colorblindr")
+```
+
+# Quick start
+
+Make a figure:
+```{r iris-figure, fig.width = 5, fig.asp = .69}
+library(ggplot2)
+fig <- ggplot(iris, aes(Sepal.Length, fill = Species)) + geom_density(alpha = 0.7)
+fig
+```
+
+Now look at it in various color-vision deficiency simulations:
+```{r iris-cvd-grid, fig.width = 8, fig.asp = .69, message = FALSE}
+library(colorblindr)
+cvd_grid(fig)
+```
+
+Then inspect it in the interactive app:
+```{r eval = FALSE}
+view_cvd(p) # starts the interactive app
 ```

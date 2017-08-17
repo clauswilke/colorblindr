@@ -7,8 +7,6 @@ colorblindr
 
 Simulate colorblindness in production-ready R figures. Written by Claire D. McWhite and Claus O. Wilke.
 
-This is an experimental package in early development. Don't expect anything to work.
-
 Installation
 ============
 
@@ -20,3 +18,31 @@ This package depends on the development version of **cowplot** and on a patched 
 Then install **colorblindr**:
 
     devtools::install_github("clauswilke/colorblindr")
+
+Quick start
+===========
+
+Make a figure:
+
+``` r
+library(ggplot2)
+fig <- ggplot(iris, aes(Sepal.Length, fill = Species)) + geom_density(alpha = 0.7)
+fig
+```
+
+![](man/figures/README-iris-figure-1.png)
+
+Now look at it in various color-vision deficiency simulations:
+
+``` r
+library(colorblindr)
+cvd_grid(fig)
+```
+
+![](man/figures/README-iris-cvd-grid-1.png)
+
+Then inspect it in the interactive app:
+
+``` r
+view_cvd(p) # starts the interactive app
+```
