@@ -34,7 +34,7 @@ deutan_transform <- function(sev = 1) {
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
 deutan <- function(colors, sev = 1) {
-  simulate_colorblind(colors, cvd=deutan_transform(sev))
+  simulate_cvd(colors, cvd_transform=deutan_transform(sev))
 }
 
 #' Generate color transformation matrices using the protan model of colorblindness
@@ -65,7 +65,7 @@ protan_transform <- function(sev = 1) {
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
 protan <- function(colors, sev = 1) {
-  simulate_colorblind(colors, cvd = protan_transform(sev))
+  simulate_cvd(colors, cvd_transform = protan_transform(sev))
 }
 
 #' Generate color transformation matrices using the tritan model of colorblindness
@@ -96,5 +96,5 @@ tritan_transform <- function(sev = 1) {
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
 tritan <- function(colors, sev = 1){
-  simulate_colorblind(colors, cvd=tritan_transform(sev))
+  simulate_cvd(colors, cvd_transform=tritan_transform(sev))
 }

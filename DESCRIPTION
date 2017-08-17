@@ -35,7 +35,7 @@ Collate:
     'color_conversion.R'
     'cvd.R'
     'edit_colors.R'
-    'simulate_colorblind.R'
+    'simulate_cvd.R'
     'utils.R'
     'view_cvd.R'
 RoxygenNote: 6.0.1
