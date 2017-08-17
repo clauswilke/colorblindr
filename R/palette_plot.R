@@ -16,8 +16,8 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE)
 
 
   # find light and dark colors by converting to Lab space
-  cols <- t(col2rgb(colors))
-  m <- convertColor(cols, from = "sRGB", to = "Lab", scale.in = 255)
+  cols <- t(grDevices::col2rgb(colors))
+  m <- grDevices::convertColor(cols, from = "sRGB", to = "Lab", scale.in = 255)
   light <- m[,1]>65
 
   # data frame of rectangles
