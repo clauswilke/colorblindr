@@ -15,7 +15,7 @@ view_cvd <- function(plot) {
     response <- readline(prompt="Do you want to close all open graphics devices (y/n)? ")
     if (response == "y" | response == "Y" ) {
       grDevices::graphics.off() # this is needed to get the output redirected to the shiny app
-      message("Exiting view_cvd() and closing all graphics devices.")
+      message("Exiting view_cvd() and closing all graphics devices. Please run view_cvd() again.")
     }
     else {
       message("Exiting view_cvd() and leaving graphics devices open.")
