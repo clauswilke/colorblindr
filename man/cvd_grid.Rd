@@ -14,3 +14,6 @@ cvd_grid(plot, severity = 1)
 \description{
 Create a grid of different color-deficiency simulations of a plot
 }
+\examples{
+cvd_grid(palette_plot(palette_OkabeIto, color_labels = FALSE))
+}

@@ -7,6 +7,7 @@
 #' @examples
 #' palette_plot(palette_OkabeIto)
 #' palette_plot(c("red", "green", "yellow", "magenta"), color_labels = FALSE)
+#' @importFrom ggplot2 ggplot aes geom_rect scale_fill_manual geom_text theme
 #' @export
 palette_plot <- function(colors, label_size = 6, color_labels = TRUE)
 {
@@ -31,10 +32,13 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE)
                       color=factor(colors, levels=colors),
                       light=light)
 
-  ggplot2::ggplot() +
-    ggplot2::geom_rect(data=tiles, ggplot2::aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill=color)) +
-    ggplot2::scale_fill_manual(values=colors) +
-    ggplot2::geom_text(data=tiles[tiles$light & color_labels,], ggplot2::aes(x, y, label=color), color="black", size=label_size) +
-    ggplot2::geom_text(data=tiles[!tiles$light & color_labels,], ggplot2::aes(x, y, label=color), color="white", size=label_size) +
-    cowplot::theme_nothing() + ggplot2::theme(legend.position = "none")
+  # code to appease CRAN check
+  x <- xmax <- xmin <- y <- ymax <- ymin <- color <- NULL
+
+  ggplot() +
+    geom_rect(data=tiles, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill=color)) +
+    scale_fill_manual(values=colors) +
+    geom_text(data=tiles[tiles$light & color_labels,], aes(x, y, label=color), color="black", size=label_size) +
+    geom_text(data=tiles[!tiles$light & color_labels,], aes(x, y, label=color), color="white", size=label_size) +
+    cowplot::theme_nothing() + theme(legend.position = "none")
 }

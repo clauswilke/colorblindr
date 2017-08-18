@@ -4,14 +4,14 @@
 \alias{palette_plot}
 \title{Visualize a color palette as swatches of colors, possibly with labels printed on top}
 \usage{
-palette_plot(colors, label_size = 6, print_color_labels = TRUE)
+palette_plot(colors, label_size = 6, color_labels = TRUE)
 }
 \arguments{
 \item{colors}{Vector of color names or hex codes}
 
 \item{label_size}{Size of the color labels to be printed}
 
-\item{print_color_labels}{Individual bool or vector of bools indicating for which colors the
+\item{color_labels}{Individual bool or vector of bools indicating for which colors the
 color names should be printed on top of the color swatch.}
 }
 \description{
@@ -19,5 +19,5 @@ Visualize a color palette as swatches of colors, possibly with labels printed on
 }
 \examples{
 palette_plot(palette_OkabeIto)
-palette_plot(c("red", "green", "yellow", "magenta"), print_color_labels = FALSE)
+palette_plot(c("red", "green", "yellow", "magenta"), color_labels = FALSE)
 }
