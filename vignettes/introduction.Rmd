@@ -12,7 +12,7 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-# Basic usage
+#Introduction
 
 In any medium sized group of people, there is likely at least one person with color perception deficiencies.As color is used to encode information in plots, inability to perceive distinct colors causes comprehension problems. However, careful selection of colors allows plots to be legible to all. 
 
@@ -20,6 +20,10 @@ Colorblindr is a package to apply simulations of color vision deficiencies to ex
 
 
 We simulate color vision deficiencies using the algorithms from Machado 2009, "A Physiologically-based Model for Simulation of Color Vision Deficiency" http://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
+
+For more information on Color Universal Design see http://jfly.iam.u-tokyo.ac.jp/color/
+
+# Basic usage
 
 Make a figure:
 
@@ -74,7 +78,7 @@ plot_grid(p, p2, p3, p4, nrow=1)
 ```
 
 
-Applying simulations to images accurately conveys whether color coding schemes will be distiguishable with the most common forms of color vision deficiency. Seeing how an image looks hopefully will inspire better choices of color schemes for images. 
+Applying simulations to images accurately conveys whether color coding schemes will be distiguishable with the most common forms of color vision deficiency.  
 ```{r}
 library(magick)
 p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
