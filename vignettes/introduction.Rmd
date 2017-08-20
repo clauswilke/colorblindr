@@ -14,14 +14,22 @@ vignette: >
 
 #Introduction
 
-In any medium sized group of people, there is likely at least one person with color perception deficiencies.As color is used to encode information in plots, inability to perceive distinct colors causes comprehension problems. However, careful selection of colors allows plots to be legible to all. 
+In any medium sized group of people, there is likely at least one person with color perception deficiencies. As color is used to encode information in plots, inability to perceive distinct colors causes comprehension problems. However, careful selection of colors allows plots to be generally legible to all. 
 
 Colorblindr is a package to apply simulations of color vision deficiencies to existing ggplot2 figures. It can simulate various classes and severities of color blindness, as well as desaturate plots. More generally, colorblindr allows post-hoc editing of colors in ggplots. 
 
 
-We simulate color vision deficiencies using the algorithms from Machado 2009, "A Physiologically-based Model for Simulation of Color Vision Deficiency" http://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
+We simulate color vision deficiencies using the algorithms from Machado 2009, ["A Physiologically-based Model for Simulation of Color Vision Deficiency"]( http://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html)
 
-For more information on Color Universal Design see http://jfly.iam.u-tokyo.ac.jp/color/
+For more information on Color Universal Design see Masataka Okabe 
+ and Kei Ito's [introduction](http://jfly.iam.u-tokyo.ac.jp/color/). Their 3 (+1) principles are:
+
+ 1. Choose color schemes that can be easily identified by people with all types of color vision, in consideration with the actual lighting conditions and usage environment.
+ 2.Use not only different colors but also a combination of different shapes, positions, line types and coloring patterns, to ensure that information is conveyed to all users including those who cannot distinguish differences in color.
+ 3. Clearly state color names where users are expected to use color names in communication.
+ +1. Moreover, aim for visually friendly and beautiful designs.
+
+This package includes`scale_color_OkabeIto` and `scale_fill_OkabeIto` color palettes following their recommendations. 
 
 # Basic usage
 
@@ -41,7 +49,7 @@ p4 <- edit_colors(p, tritan, sev = 1)
 plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan10", "Protan10", "Tritan10"))
 ```
 
-Simulate the more common, less severe color vision deficiencies by lowering `sev`.
+Simulate more common, less severe color vision deficiencies by lowering `sev`.
 ```{r}
 
 
@@ -55,7 +63,7 @@ plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan5", "Protan5", "Tritan5")
 ```
 
 
-Or make a desaturated version:
+Or make a desaturated version. Currently, to get the scalable desaturate function, the package `colorspace` must be installed by `install.packages("colorspace", repos = "http://R-Forge.R-project.org")` and be at least version 1.3-3.
 ```{r}
 
 p2 <- edit_colors(p, desaturate, amount = .3)
@@ -78,14 +86,11 @@ plot_grid(p, p2, p3, p4, nrow=1)
 ```
 
 
-Applying simulations to images accurately conveys whether color coding schemes will be distiguishable with the most common forms of color vision deficiency.  
+The `view_cvd` function starts an shiny app to view simulations interactively. 
 ```{r}
 library(magick)
 p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
-p2 <- edit_colors(p, deutan, sev = .7)
-plot_grid(p, p2, nrow=1)
-
-
+#view_cvd(p)
 ```
 
 The function `edit_colors` also allows custom color replacement functions.
