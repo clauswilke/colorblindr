@@ -62,6 +62,14 @@ p4 <- edit_colors(p, tritan, sev = .5)
 plot_grid(p, p2, p3, p4, labels = c("Original", "Deutan5", "Protan5", "Tritan5"))
 ```
 
+The`palette_OkabeIto`, and `palette_OkabeIto_black`palettes are provided as a convenient generally colorblind friendly scheme. 
+
+```{r}
+p2 <- p + scale_fill_OkabeIto()
+plot_grid(p, p2)
+
+```
+
 
 Or make a desaturated version. Currently, to get the scalable desaturate function, the package `colorspace` must be installed by `install.packages("colorspace", repos = "http://R-Forge.R-project.org")` and be at least version 1.3-3.
 ```{r}
@@ -72,6 +80,22 @@ p4 <- edit_colors(p, desaturate, amount = 1)
 
 plot_grid(p, p2, p3, p4)
 ```
+
+The function `edit_colors` also allows custom color replacement functions. At its simplest, we can replace either all `fill` colors with one color and all `color` with another.
+```{r}
+
+edit_colors(p, colfun = function(c) {"#111111"}, fillfun =  function(c){"#FFFFFF"})
+
+to_white <- function(c) {"#FFFFFF"} # convert everything to white
+to_black <- function(c) {"#000000"} # convert everything to black
+
+p2 <- edit_colors(p, colfun = to_white, fillfun = to_black)
+p3 <- edit_colors(p, colfun = to_black, fillfun = to_white)
+
+plot_grid(p,p2,p3, nrow=1)
+```
+
+
 
 We can use the library `magick` to convert images to ggplot objects and edit colors. 
 ```{r}
@@ -86,6 +110,11 @@ plot_grid(p, p2, p3, p4, nrow=1)
 ```
 
 
+
+
+
+
+
 The `view_cvd` function starts an shiny app to view simulations interactively. 
 ```{r}
 library(magick)
@@ -93,14 +122,59 @@ p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
 #view_cvd(p)
 ```
 
-The function `edit_colors` also allows custom color replacement functions.
-DO this with the coloring book style plot
+
+We can use custom rgb transform matrices to separate an image into its compenent red, green, and blue channels.
 ```{r}
-g <- grid::circleGrob(r = .3, gp = grid::gpar(col = '#FF0000', fill = '#0000FF'))
-to_white <- function(c) {"#FFFFFF"} # convert everything to white
-to_black <- function(c) {"#000000"} # convert everything to black
-g2 <- edit_colors(g, colfun = to_white, fillfun = to_black)
-plot_grid(g, g2)
+
+library(magick)
+p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
+
+to_red <- function(c){simulate_cvd(c, matrix(c(
+    1, 0, 0,
+    0,  0,  0,
+    0,  0, 0 )
+ ,3,3,byrow=TRUE))}
+
+to_green <- function(c){simulate_cvd(c, matrix(c(
+    0, 0, 0,
+    0,  1,  0,
+    0,  0, 0 )
+ ,3,3,byrow=TRUE))} 
+
+to_blue <- function(c){simulate_cvd(c, matrix(c(
+    0, 0, 0,
+    0,  0,  0,
+    0,  0, 1 )
+ ,3,3,byrow=TRUE))} 
+
+p2 <-  edit_colors(p, to_red )
+p3 <-  edit_colors(p, to_green )
+p4 <-  edit_colors(p, to_blue )
+plot_grid(p,p2,p3,p4)
+
 ```
+
+~~~RANDOM COLORS~~~
+```{r}
+
+library(magick)
+set.seed(42)
+p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
+
+to_random <- function(c){simulate_cvd(c, matrix(c(
+    runif(1,0,1), runif(1,-1,1), runif(1,-1,1),
+    runif(1,-1,1),  runif(1,0,1),  runif(1,-1,1),
+    runif(1,-1,1),  runif(1,-1,1),  runif(1,0,1)
+  ),3,3,byrow=TRUE))} 
+
+p1 <-  edit_colors(p, to_random )
+p2 <-  edit_colors(p, to_random )
+p3 <-  edit_colors(p, to_random )
+p4 <-  edit_colors(p, to_random )
+plot_grid(p1,p2,p3,p4)
+
+```
+
+
 
 
