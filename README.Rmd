@@ -26,8 +26,8 @@ This package depends on the development versions of **cowplot** and **colorspace
 ```
 devtools::install_github("wilkelab/cowplot")
 
-#On Windows:
-devtools::install_github("wilkelab/colorspace")
+#On Windows(temporary fix):
+devtools::install_github("clairemcwhite/colorspace")
 
 #On non-Windows:
 install.packages("colorspace", repos = "http://R-Forge.R-project.org")
