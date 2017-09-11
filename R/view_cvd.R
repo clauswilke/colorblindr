@@ -33,14 +33,14 @@ cvdUI <- function(plot) {
     shiny::headerPanel("Color-vision-deficiency simulation"),
 
     # sidebar panel, defined below
-    sidebarPanel(),
+    cvdApp_sidebarPanel(),
 
     # main panel, defined below
-    mainPanel()
+    cvdApp_mainPanel()
   ))
 }
 
-sidebarPanel <- function() {
+cvdApp_sidebarPanel <- function() {
   # sidebar with controls to select the simulation choice
   shiny::sidebarPanel(
     shiny::selectInput("variable", "Simulation type",
@@ -55,7 +55,7 @@ sidebarPanel <- function() {
 }
 
 
-mainPanel <- function() {
+cvdApp_mainPanel <- function() {
   # Show the caption and plot of the requested variable against mpg
   shiny::mainPanel(
     shiny::h3(shiny::textOutput("caption")),
