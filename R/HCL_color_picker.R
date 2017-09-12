@@ -13,17 +13,19 @@ HCL_color_picker <- function() {
 }
 
 color_picker_UI <- function() {
-  shiny::shinyUI(shiny::pageWithSidebar(
+  shiny::fluidPage(
 
     # application title
-    shiny::headerPanel("HCL color picker"),
+    shiny::titlePanel("HCL color picker"),
 
-    # sidebar panel, defined below
-    color_picker_sidebarPanel(),
+    shiny::sidebarLayout(
+      # sidebar panel, defined below
+      color_picker_sidebarPanel(),
 
-    # main panel, defined below
-    color_picker_mainPanel()
-  ))
+      # main panel, defined below
+      color_picker_mainPanel()
+    )
+  )
 }
 
 color_picker_sidebarPanel <- function() {
@@ -44,12 +46,19 @@ color_picker_sidebarPanel <- function() {
 
 
 color_picker_mainPanel <- function() {
-  # Show the caption and plot of the requested variable against mpg
   shiny::mainPanel(
-    shiny::plotOutput("HC_plot", click = "HC_plot_click"),
-    shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
-    shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
-    shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
+   shiny::tabsetPanel(type = "tabs",
+                     shiny::tabPanel("Hue-Chroma plane",
+                       shiny::plotOutput("HC_plot", click = "HC_plot_click"),
+#                       shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
+#                       shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
+                       shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
+                       ),
+                     shiny::tabPanel("Luminance-Chroma plane",
+                       shiny::plotOutput("LC_plot", click = "LC_plot_click"),
+                       shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px")
+                       )
+    )
   )
 }
 
@@ -69,6 +78,19 @@ color_picker_Server <- function() {
       shiny::updateSliderInput(session, "C", value = round(coords_HCL[2L]))
       shiny::updateSliderInput(session, "H", value = round(coords_HCL[3L]))
     })
+
+    shiny::observeEvent({input$LC_plot_click}, {
+      # store the old colors
+      Lold <- as.numeric(input$L)
+      Cold <- as.numeric(input$C)
+      C <- input$LC_plot_click$x
+      if (is.null(C)) C <- Cold
+      L <- input$LC_plot_click$y
+      if (is.null(L)) L <- Lold
+      shiny::updateSliderInput(session, "C", value = round(C))
+      shiny::updateSliderInput(session, "L", value = round(L))
+    })
+
 
     shiny::observeEvent({input$Hgrad_click}, {
       H <- input$Hgrad_click$x
@@ -114,10 +136,16 @@ color_picker_Server <- function() {
                      hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))), ";"))
     })
 
-    # generate HCL plot with given inputs
+    # generate HC plot with given inputs
     output$HC_plot <- shiny::renderPlot({
       color_picker_hue_chroma_plot(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
+
+    # generate LC plot with given inputs
+    output$LC_plot <- shiny::renderPlot({
+      color_picker_luminance_chroma_plot(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    })
+
 
     output$Hgrad <- shiny::renderPlot({
       color_picker_H_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
@@ -130,6 +158,10 @@ color_picker_Server <- function() {
     output$Lgrad <- shiny::renderPlot({
       color_picker_L_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
+
+#    output$hexcolor <- renderPrint({
+#      hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H)))
+#    })
 
   })
 }
@@ -154,6 +186,23 @@ color_picker_hue_chroma_plot <- function(L = 75, C = 20, H = 0, n = 200) {
     ggplot2::coord_fixed(xlim = c(-150, 150), ylim = c(-150, 150), expand = FALSE) +
     ggplot2::theme_minimal()
 }
+
+color_picker_luminance_chroma_plot <- function(L = 75, C = 20, H = 0, n = 200) {
+  Cseq <- seq(0, 150, length.out = n)
+  Lseq <- seq(100, 0, length.out = n)
+  grid <- expand.grid(C = Cseq, L = Lseq)
+  image <- matrix(hex(polarLUV(grid$L, grid$C, H)), nrow = n, byrow = TRUE)
+  grob <- grid::rasterGrob(image, width = 1, height = 1)
+
+  sel_col <- polarLUV(L, C, H) # selected color in polar LUV
+  df_sel <- data.frame(C = C, L = L)
+
+  ggplot2::ggplot(df_sel, ggplot2::aes(C, L)) + ggplot2::annotation_custom(grob) +
+    ggplot2::geom_point(size = 5, color = "black", fill = hex(sel_col), shape = 21) +
+    ggplot2::coord_fixed(xlim = c(0, 150), ylim = c(0, 100), expand = FALSE) +
+    ggplot2::theme_minimal()
+}
+
 
 
 color_picker_C_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
