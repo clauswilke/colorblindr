@@ -5,7 +5,7 @@
 #' HCL_color_picker()
 #' }
 #' @export
-#' @importFrom colorspace polarLUV LUV hex coords
+#' @importFrom colorspace polarLUV LUV hex coords hex2RGB
 #' @importFrom methods as
 HCL_color_picker <- function() {
   app <- shiny::shinyApp(ui = color_picker_UI(), server = color_picker_Server())
@@ -46,7 +46,7 @@ color_picker_sidebarPanel <- function() {
 color_picker_mainPanel <- function() {
   # Show the caption and plot of the requested variable against mpg
   shiny::mainPanel(
-    shiny::plotOutput("plot", click = "plot_click"),
+    shiny::plotOutput("HC_plot", click = "HC_plot_click"),
     shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
     shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
     shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
@@ -57,12 +57,12 @@ color_picker_mainPanel <- function() {
 color_picker_Server <- function() {
   shiny::shinyServer(function(input, output, session) {
 
-    shiny::observeEvent({input$plot_click}, {
+    shiny::observeEvent({input$HC_plot_click}, {
       # store the old colors
       coords_old_LUV <- coords(as(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H)), "LUV"))
-      U <- input$plot_click$x
+      U <- input$HC_plot_click$x
       if (is.null(U)) U <- coords_old_LUV[2L]
-      V <- input$plot_click$y
+      V <- input$HC_plot_click$y
       if (is.null(V)) V <- coords_old_LUV[3L]
       L <- input$L
       coords_HCL <- coords(as(LUV(L, U, V), "polarLUV"))
@@ -115,8 +115,8 @@ color_picker_Server <- function() {
     })
 
     # generate HCL plot with given inputs
-    output$plot <- shiny::renderPlot({
-      color_picker_HCL_plot(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    output$HC_plot <- shiny::renderPlot({
+      color_picker_hue_chroma_plot(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
 
     output$Hgrad <- shiny::renderPlot({
@@ -135,59 +135,41 @@ color_picker_Server <- function() {
 }
 
 
-color_picker_HCL_plot <- function(L, C = 20, H = 0, n = 100) {
+color_picker_hue_chroma_plot <- function(L = 75, C = 20, H = 0, n = 200) {
   U <- seq(-150, 150, length.out = n)
-  V <- seq(-150, 150, length.out = n)
+  V <- seq(150, -150, length.out = n)
   grid <- expand.grid(U = U, V = V)
-
-  luv <- LUV(L, grid$U, grid$V)
-
-  df <- data.frame(U = grid$U,
-                   V = grid$V,
-                   col = hex(luv),
-                   stringsAsFactors = FALSE)
-
-  colors <- df$col
-  names(colors) <- df$col
+  image <- matrix(hex(LUV(L, grid$U, grid$V)), nrow = n, byrow = TRUE)
+  grob <- grid::rasterGrob(image)
 
   sel_col <- polarLUV(L, C, H) # selected color in polar LUV
   sel_pt <- coords(as(sel_col, "LUV")) # coordinates of selected point in LUV
   df_sel <- data.frame(U = sel_pt[2L], V = sel_pt[3L])
 
-  ggplot2::ggplot(df, ggplot2::aes(U, V, fill = col)) + ggplot2::geom_raster(interpolate = TRUE, na.rm = TRUE) +
-    ggplot2::geom_point(data = df_sel, ggplot2::aes(U, V),
-               inherit.aes = FALSE, size = 5, color = "black", fill = hex(sel_col),
-               shape = 21) +
+  ggplot2::ggplot(df_sel, ggplot2::aes(U, V)) + ggplot2::annotation_custom(grob) +
+    ggplot2::geom_point(size = 5, color = "black", fill = hex(sel_col), shape = 21) +
     ggplot2::annotate("path",
-             x=C*cos(seq(0, 2*pi, length.out=100)),
-             y=C*sin(seq(0, 2*pi, length.out=100)), color = "black", size = 0.2, alpha = 0.5) +
-    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+                      x=C*cos(seq(0, 2*pi, length.out=100)),
+                      y=C*sin(seq(0, 2*pi, length.out=100)), color = "black", size = 0.2, alpha = 0.5) +
     ggplot2::coord_fixed(xlim = c(-150, 150), ylim = c(-150, 150), expand = FALSE) +
     ggplot2::theme_minimal()
 }
 
 
-color_picker_C_gradient <- function(L, C = 20, H = 0, n = 100) {
-  Cseq = seq(0, max(150, C+5), length.out = n)
-  col <- hex(polarLUV(L, Cseq, H))
+color_picker_C_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
+  Cmax <- max(150, C+5)
+  Cseq <- seq(0, Cmax, length.out = n)
+  image <- matrix(hex(polarLUV(L, Cseq, H)), nrow = 1, byrow = TRUE)
+  grob <- grid::rasterGrob(image, width = 1, height = 1)
+
   sel_col <- hex(polarLUV(L, C, H))
-
-  df <- data.frame(C = Cseq,
-                   y = 0,
-                   col = col,
-                   stringsAsFactors = FALSE)
-
-  colors <- df$col
-  names(colors) <- df$col
-
   df_sel <- data.frame(C = C, H = H, L = L, y = 0)
 
-  ggplot2::ggplot(df, ggplot2::aes(C, y, fill = col)) + ggplot2::geom_raster(interpolate = TRUE, na.rm = TRUE) +
-    ggplot2::geom_point(data = df_sel, ggplot2::aes(C, y),
-                        inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
-                        shape = 21) +
-    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+  y <- 0 # dummy assignment to make CRAN check happy
+  ggplot2::ggplot(df_sel, ggplot2::aes(C, y)) + ggplot2::annotation_custom(grob) +
+    ggplot2::geom_point(size = 5, color = "black", fill = sel_col, shape = 21) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::scale_x_continuous(limits = c(0, Cmax), expand = c(0, 0)) +
     ggplot2::ylab("C") +
     ggplot2::theme_minimal() +
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
@@ -196,30 +178,23 @@ color_picker_C_gradient <- function(L, C = 20, H = 0, n = 100) {
                    axis.line.y = ggplot2::element_blank(),
                    axis.ticks.y = ggplot2::element_blank(),
                    panel.grid.major.y = ggplot2::element_blank(),
-                   panel.grid.minor.y = ggplot2::element_blank())
+                   panel.grid.minor.y = ggplot2::element_blank(),
+                   plot.margin = ggplot2::margin(3, 20, 3, 0))
 }
 
-color_picker_H_gradient <- function(L, C = 20, H = 0, n = 100) {
+color_picker_H_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
   Hseq = seq(0, 360, length.out = n)
-  col <- hex(polarLUV(L, C, Hseq))
+  image <- matrix(hex(polarLUV(L, C, Hseq)), nrow = 1, byrow = TRUE)
+  grob <- grid::rasterGrob(image, width = 1, height = 1)
+
   sel_col <- hex(polarLUV(L, C, H))
-
-  df <- data.frame(H = Hseq,
-                   y = 0,
-                   col = col,
-                   stringsAsFactors = FALSE)
-
-  colors <- df$col
-  names(colors) <- df$col
-
   df_sel <- data.frame(C = C, H = H, L = L, y = 0)
 
-  ggplot2::ggplot(df, ggplot2::aes(H, y, fill = col)) + ggplot2::geom_raster(interpolate = TRUE, na.rm = TRUE) +
-    ggplot2::geom_point(data = df_sel, ggplot2::aes(H, y),
-                        inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
-                        shape = 21) +
-    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+  y <- 0 # dummy assignment to make CRAN check happy
+  ggplot2::ggplot(df_sel, ggplot2::aes(H, y)) + ggplot2::annotation_custom(grob) +
+    ggplot2::geom_point(size = 5, color = "black", fill = sel_col, shape = 21) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::scale_x_continuous(limits = c(0, 360), expand = c(0, 0)) +
     ggplot2::ylab("H") +
     ggplot2::theme_minimal() +
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
@@ -228,30 +203,23 @@ color_picker_H_gradient <- function(L, C = 20, H = 0, n = 100) {
                    axis.line.y = ggplot2::element_blank(),
                    axis.ticks.y = ggplot2::element_blank(),
                    panel.grid.major.y = ggplot2::element_blank(),
-                   panel.grid.minor.y = ggplot2::element_blank())
+                   panel.grid.minor.y = ggplot2::element_blank(),
+                   plot.margin = ggplot2::margin(3, 20, 3, 0))
 }
 
-color_picker_L_gradient <- function(L, C = 20, H = 0, n = 100) {
+color_picker_L_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
   Lseq = seq(0, 100, length.out = n)
-  col <- hex(polarLUV(Lseq, C, H))
+  image <- matrix(hex(polarLUV(Lseq, C, H)), nrow = 1, byrow = TRUE)
+  grob <- grid::rasterGrob(image, width = 1, height = 1)
+
   sel_col <- hex(polarLUV(L, C, H))
-
-  df <- data.frame(L = Lseq,
-                   y = 0,
-                   col = col,
-                   stringsAsFactors = FALSE)
-
-  colors <- df$col
-  names(colors) <- df$col
-
   df_sel <- data.frame(C = C, H = H, L = L, y = 0)
 
-  ggplot2::ggplot(df, ggplot2::aes(L, y, fill = col)) + ggplot2::geom_raster(interpolate = TRUE, na.rm = TRUE) +
-    ggplot2::geom_point(data = df_sel, ggplot2::aes(L, y),
-                        inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
-                        shape = 21) +
-    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+  y <- 0 # dummy assignment to make CRAN check happy
+  ggplot2::ggplot(df_sel, ggplot2::aes(L, y)) + ggplot2::annotation_custom(grob) +
+    ggplot2::geom_point(size = 5, color = "black", fill = sel_col, shape = 21) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::scale_x_continuous(limits = c(0, 100), expand = c(0, 0)) +
     ggplot2::ylab("L") +
     ggplot2::theme_minimal() +
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
@@ -260,6 +228,7 @@ color_picker_L_gradient <- function(L, C = 20, H = 0, n = 100) {
                    axis.line.y = ggplot2::element_blank(),
                    axis.ticks.y = ggplot2::element_blank(),
                    panel.grid.major.y = ggplot2::element_blank(),
-                   panel.grid.minor.y = ggplot2::element_blank())
+                   panel.grid.minor.y = ggplot2::element_blank(),
+                   plot.margin = ggplot2::margin(3, 20, 3, 0))
 }
 
