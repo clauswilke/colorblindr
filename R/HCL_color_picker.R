@@ -43,7 +43,10 @@ color_picker_sidebarPanel <- function() {
 color_picker_mainPanel <- function() {
   # Show the caption and plot of the requested variable against mpg
   shiny::mainPanel(
-    shiny::plotOutput("plot", click = "plot_click")
+    shiny::plotOutput("plot", click = "plot_click"),
+    shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
+    shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
+    shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
   )
 }
 
@@ -67,6 +70,35 @@ color_picker_Server <- function() {
     })
 
     shiny::observe({
+      H <- input$Hgrad_click$x
+      if (!is.null(H)) {
+        shiny::updateSliderInput(session, "H", value = H)
+        shiny::updateTextInput(session, "hexcolor",
+                               value = hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))))
+      }
+    })
+
+    shiny::observe({
+      L <- input$Lgrad_click$x
+      if (!is.null(L)) {
+        shiny::updateSliderInput(session, "L", value = L)
+        shiny::updateTextInput(session, "hexcolor",
+                               value = hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))))
+      }
+    })
+
+    shiny::observe({
+      C <- input$Cgrad_click$x
+      if (!is.null(C)) {
+        shiny::updateSliderInput(session, "C", value = C)
+        shiny::updateTextInput(session, "hexcolor",
+                               value = hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))))
+      }
+    })
+
+
+
+    shiny::observe({
       # only execute this on complete color hex codes
       if (grepl("^#[0123456789ABCDEFabcdef]{6}$", input$hexcolor)) {
         col_RGB <- hex2RGB(input$hexcolor)
@@ -78,9 +110,21 @@ color_picker_Server <- function() {
     })
 
 
-    # generate HCL plot with given L
+    # generate HCL plot with given inputs
     output$plot <- shiny::renderPlot({
       color_picker_HCL_plot(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    })
+
+    output$Hgrad <- shiny::renderPlot({
+      color_picker_H_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    })
+
+    output$Cgrad <- shiny::renderPlot({
+      color_picker_C_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    })
+
+    output$Lgrad <- shiny::renderPlot({
+      color_picker_L_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
 
   })
@@ -116,5 +160,99 @@ color_picker_HCL_plot <- function(L, C = 20, H = 0, n = 40) {
     ggplot2::scale_fill_manual(values = colors, guide = "none") +
     ggplot2::coord_fixed(xlim = c(-150, 150), ylim = c(-150, 150), expand = FALSE) +
     ggplot2::theme_minimal()
+}
+
+
+color_picker_C_gradient <- function(L, C = 20, H = 0, n = 40) {
+  Cseq = seq(0, 150, length.out = n)
+  col <- hex(polarLUV(L, Cseq, H))
+  sel_col <- hex(polarLUV(L, C, H))
+
+  df <- data.frame(C = Cseq,
+                   y = 0,
+                   col = col,
+                   stringsAsFactors = FALSE)
+
+  colors <- df$col
+  names(colors) <- df$col
+
+  df_sel <- data.frame(C = C, H = H, L = L, y = 0)
+
+  ggplot2::ggplot(df, ggplot2::aes(C, y, fill = col)) + ggplot2::geom_raster(interpolate = TRUE, na.rm = TRUE) +
+    ggplot2::geom_point(data = df_sel, ggplot2::aes(C, y),
+                        inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
+                        shape = 21) +
+    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+    ggplot2::ylab("C") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5),
+                   axis.text.y = ggplot2::element_blank(),
+                   axis.line.y = ggplot2::element_blank(),
+                   axis.ticks.y = ggplot2::element_blank(),
+                   panel.grid.major.y = ggplot2::element_blank(),
+                   panel.grid.minor.y = ggplot2::element_blank())
+}
+
+color_picker_H_gradient <- function(L, C = 20, H = 0, n = 40) {
+  Hseq = seq(0, 360, length.out = n)
+  col <- hex(polarLUV(L, C, Hseq))
+  sel_col <- hex(polarLUV(L, C, H))
+
+  df <- data.frame(H = Hseq,
+                   y = 0,
+                   col = col,
+                   stringsAsFactors = FALSE)
+
+  colors <- df$col
+  names(colors) <- df$col
+
+  df_sel <- data.frame(C = C, H = H, L = L, y = 0)
+
+  ggplot2::ggplot(df, ggplot2::aes(H, y, fill = col)) + ggplot2::geom_raster(interpolate = TRUE, na.rm = TRUE) +
+    ggplot2::geom_point(data = df_sel, ggplot2::aes(H, y),
+                        inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
+                        shape = 21) +
+    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+    ggplot2::ylab("H") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5),
+                   axis.text.y = ggplot2::element_blank(),
+                   axis.line.y = ggplot2::element_blank(),
+                   axis.ticks.y = ggplot2::element_blank(),
+                   panel.grid.major.y = ggplot2::element_blank(),
+                   panel.grid.minor.y = ggplot2::element_blank())
+}
+
+color_picker_L_gradient <- function(L, C = 20, H = 0, n = 40) {
+  Lseq = seq(0, 100, length.out = n)
+  col <- hex(polarLUV(Lseq, C, H))
+  sel_col <- hex(polarLUV(L, C, H))
+
+  df <- data.frame(L = Lseq,
+                   y = 0,
+                   col = col,
+                   stringsAsFactors = FALSE)
+
+  colors <- df$col
+  names(colors) <- df$col
+
+  df_sel <- data.frame(C = C, H = H, L = L, y = 0)
+
+  ggplot2::ggplot(df, ggplot2::aes(L, y, fill = col)) + ggplot2::geom_raster(interpolate = TRUE, na.rm = TRUE) +
+    ggplot2::geom_point(data = df_sel, ggplot2::aes(L, y),
+                        inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
+                        shape = 21) +
+    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+    ggplot2::ylab("L") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5),
+                   axis.text.y = ggplot2::element_blank(),
+                   axis.line.y = ggplot2::element_blank(),
+                   axis.ticks.y = ggplot2::element_blank(),
+                   panel.grid.major.y = ggplot2::element_blank(),
+                   panel.grid.minor.y = ggplot2::element_blank())
 }
 
