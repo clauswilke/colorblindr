@@ -35,7 +35,8 @@ color_picker_sidebarPanel <- function() {
                        min = 0, max = 180, value = 40),
     shiny::sliderInput("L", "Lightness",
                        min = 0, max = 100, value = 60),
-    shiny::textInput("hexcolor", "R color", hex(polarLUV(60, 40, 60)))
+    shiny::textInput("hexcolor", "RGB hex color", hex(polarLUV(60, 40, 60))),
+    shiny::htmlOutput("colorbox")
   )
 }
 
@@ -109,6 +110,11 @@ color_picker_Server <- function() {
       }
     })
 
+
+    output$colorbox <- shiny::renderUI({
+      shiny::tags$div(style=paste0("width: 100%; height: 40px; border: 1px solid rgba(0, 0, 0, .2); background: ",
+                     hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))), ";"))
+    })
 
     # generate HCL plot with given inputs
     output$plot <- shiny::renderPlot({
