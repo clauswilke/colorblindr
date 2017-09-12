@@ -36,7 +36,9 @@ color_picker_sidebarPanel <- function() {
     shiny::sliderInput("L", "Lightness",
                        min = 0, max = 100, value = 60),
     shiny::textInput("hexcolor", "RGB hex color", hex(polarLUV(60, 40, 60))),
-    shiny::htmlOutput("colorbox")
+    shiny::htmlOutput("colorbox"),
+    # script to catch keystrokes
+    tags$script('$(document).on("keydown", function (e) {Shiny.onInputChange("lastkeypresscode", e.keyCode);});')
   )
 }
 
@@ -55,7 +57,7 @@ color_picker_mainPanel <- function() {
 color_picker_Server <- function() {
   shiny::shinyServer(function(input, output, session) {
 
-    shiny::observe({
+    shiny::observeEvent({input$plot_click}, {
       # store the old colors
       coords_old_LUV <- coords(as(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H)), "LUV"))
       U <- input$plot_click$x
@@ -63,53 +65,49 @@ color_picker_Server <- function() {
       V <- input$plot_click$y
       if (is.null(V)) V <- coords_old_LUV[3L]
       L <- input$L
-      col_LUV <- LUV(L, U, V)
-      coords_HCL <- coords(as(col_LUV, "polarLUV"))
-      shiny::updateSliderInput(session, "C", value = coords_HCL[2L])
-      shiny::updateSliderInput(session, "H", value = coords_HCL[3L])
-      shiny::updateTextInput(session, "hexcolor", value = hex(col_LUV))
+      coords_HCL <- coords(as(LUV(L, U, V), "polarLUV"))
+      shiny::updateSliderInput(session, "C", value = round(coords_HCL[2L]))
+      shiny::updateSliderInput(session, "H", value = round(coords_HCL[3L]))
     })
 
-    shiny::observe({
+    shiny::observeEvent({input$Hgrad_click}, {
       H <- input$Hgrad_click$x
       if (!is.null(H)) {
-        shiny::updateSliderInput(session, "H", value = H)
-        shiny::updateTextInput(session, "hexcolor",
-                               value = hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))))
+        shiny::updateSliderInput(session, "H", value = round(H))
       }
     })
 
-    shiny::observe({
+    shiny::observeEvent({input$Lgrad_click}, {
       L <- input$Lgrad_click$x
       if (!is.null(L)) {
-        shiny::updateSliderInput(session, "L", value = L)
-        shiny::updateTextInput(session, "hexcolor",
-                               value = hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))))
+        shiny::updateSliderInput(session, "L", value = round(L))
       }
     })
 
-    shiny::observe({
+    shiny::observeEvent({input$Cgrad_click}, {
       C <- input$Cgrad_click$x
       if (!is.null(C)) {
-        shiny::updateSliderInput(session, "C", value = C)
-        shiny::updateTextInput(session, "hexcolor",
-                               value = hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))))
+        shiny::updateSliderInput(session, "C", value = round(C))
       }
     })
 
-
+    shiny::observeEvent({input$hexcolor}, {
+      # only execute after key has been pressed
+      if(!is.null(input$lastkeypresscode)) {
+        # only execute this on complete color hex codes
+        if (grepl("^#[0123456789ABCDEFabcdef]{6}$", input$hexcolor)) {
+            col_RGB <- hex2RGB(input$hexcolor)
+            coords_HCL <- coords(as(col_RGB, "polarLUV"))
+            shiny::updateSliderInput(session, "L", value = round(coords_HCL[1L]))
+            shiny::updateSliderInput(session, "C", value = round(coords_HCL[2L]))
+            shiny::updateSliderInput(session, "H", value = round(coords_HCL[3L]))
+        }
+      }
+    })
 
     shiny::observe({
-      # only execute this on complete color hex codes
-      if (grepl("^#[0123456789ABCDEFabcdef]{6}$", input$hexcolor)) {
-        col_RGB <- hex2RGB(input$hexcolor)
-        coords_HCL <- coords(as(col_RGB, "polarLUV"))
-        shiny::updateSliderInput(session, "L", value = coords_HCL[1L])
-        shiny::updateSliderInput(session, "C", value = coords_HCL[2L])
-        shiny::updateSliderInput(session, "H", value = coords_HCL[3L])
-      }
+      shiny::updateTextInput(session, "hexcolor", value = hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))))
     })
-
 
     output$colorbox <- shiny::renderUI({
       shiny::tags$div(style=paste0("width: 100%; height: 40px; border: 1px solid rgba(0, 0, 0, .2); background: ",
@@ -189,10 +187,11 @@ color_picker_C_gradient <- function(L, C = 20, H = 0, n = 40) {
                         inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
                         shape = 21) +
     ggplot2::scale_fill_manual(values = colors, guide = "none") +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::ylab("C") +
     ggplot2::theme_minimal() +
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5),
+                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5, size = 14),
                    axis.text.y = ggplot2::element_blank(),
                    axis.line.y = ggplot2::element_blank(),
                    axis.ticks.y = ggplot2::element_blank(),
@@ -220,10 +219,11 @@ color_picker_H_gradient <- function(L, C = 20, H = 0, n = 40) {
                         inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
                         shape = 21) +
     ggplot2::scale_fill_manual(values = colors, guide = "none") +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::ylab("H") +
     ggplot2::theme_minimal() +
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5),
+                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5, size = 14),
                    axis.text.y = ggplot2::element_blank(),
                    axis.line.y = ggplot2::element_blank(),
                    axis.ticks.y = ggplot2::element_blank(),
@@ -251,10 +251,11 @@ color_picker_L_gradient <- function(L, C = 20, H = 0, n = 40) {
                         inherit.aes = FALSE, size = 5, color = "black", fill = sel_col,
                         shape = 21) +
     ggplot2::scale_fill_manual(values = colors, guide = "none") +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::ylab("L") +
     ggplot2::theme_minimal() +
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5),
+                   axis.title.y = ggplot2::element_text(angle = 0, vjust = 0.5, size = 14),
                    axis.text.y = ggplot2::element_blank(),
                    axis.line.y = ggplot2::element_blank(),
                    axis.ticks.y = ggplot2::element_blank(),
