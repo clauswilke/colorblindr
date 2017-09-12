@@ -135,7 +135,7 @@ color_picker_Server <- function() {
 }
 
 
-color_picker_HCL_plot <- function(L, C = 20, H = 0, n = 40) {
+color_picker_HCL_plot <- function(L, C = 20, H = 0, n = 100) {
   U <- seq(-150, 150, length.out = n)
   V <- seq(-150, 150, length.out = n)
   grid <- expand.grid(U = U, V = V)
@@ -168,7 +168,7 @@ color_picker_HCL_plot <- function(L, C = 20, H = 0, n = 40) {
 
 
 color_picker_C_gradient <- function(L, C = 20, H = 0, n = 40) {
-  Cseq = seq(0, 150, length.out = n)
+  Cseq = seq(0, max(150, C+5), length.out = n)
   col <- hex(polarLUV(L, Cseq, H))
   sel_col <- hex(polarLUV(L, C, H))
 
