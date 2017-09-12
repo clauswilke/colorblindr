@@ -38,7 +38,7 @@ color_picker_sidebarPanel <- function() {
     shiny::textInput("hexcolor", "RGB hex color", hex(polarLUV(60, 40, 60))),
     shiny::htmlOutput("colorbox"),
     # script to catch keystrokes
-    tags$script('$(document).on("keydown", function (e) {Shiny.onInputChange("lastkeypresscode", e.keyCode);});')
+    shiny::tags$script('$(document).on("keydown", function (e) {Shiny.onInputChange("lastkeypresscode", e.keyCode);});')
   )
 }
 
@@ -167,7 +167,7 @@ color_picker_HCL_plot <- function(L, C = 20, H = 0, n = 100) {
 }
 
 
-color_picker_C_gradient <- function(L, C = 20, H = 0, n = 40) {
+color_picker_C_gradient <- function(L, C = 20, H = 0, n = 100) {
   Cseq = seq(0, max(150, C+5), length.out = n)
   col <- hex(polarLUV(L, Cseq, H))
   sel_col <- hex(polarLUV(L, C, H))
@@ -199,7 +199,7 @@ color_picker_C_gradient <- function(L, C = 20, H = 0, n = 40) {
                    panel.grid.minor.y = ggplot2::element_blank())
 }
 
-color_picker_H_gradient <- function(L, C = 20, H = 0, n = 40) {
+color_picker_H_gradient <- function(L, C = 20, H = 0, n = 100) {
   Hseq = seq(0, 360, length.out = n)
   col <- hex(polarLUV(L, C, Hseq))
   sel_col <- hex(polarLUV(L, C, H))
@@ -231,7 +231,7 @@ color_picker_H_gradient <- function(L, C = 20, H = 0, n = 40) {
                    panel.grid.minor.y = ggplot2::element_blank())
 }
 
-color_picker_L_gradient <- function(L, C = 20, H = 0, n = 40) {
+color_picker_L_gradient <- function(L, C = 20, H = 0, n = 100) {
   Lseq = seq(0, 100, length.out = n)
   col <- hex(polarLUV(Lseq, C, H))
   sel_col <- hex(polarLUV(L, C, H))
