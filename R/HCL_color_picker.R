@@ -35,7 +35,7 @@ color_picker_sidebarPanel <- function() {
                        min = 0, max = 360, value = 60),
     shiny::sliderInput("C", "Chroma",
                        min = 0, max = 180, value = 40),
-    shiny::sliderInput("L", "Lightness",
+    shiny::sliderInput("L", "Luminance",
                        min = 0, max = 100, value = 60),
     shiny::textInput("hexcolor", "RGB hex color", hex(polarLUV(60, 40, 60))),
     shiny::htmlOutput("colorbox"),
@@ -48,16 +48,14 @@ color_picker_sidebarPanel <- function() {
 color_picker_mainPanel <- function() {
   shiny::mainPanel(
    shiny::tabsetPanel(type = "tabs",
-                     shiny::tabPanel("Hue-Chroma plane",
-                       shiny::plotOutput("HC_plot", click = "HC_plot_click"),
-#                       shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
-#                       shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
-                       shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
-                       ),
                      shiny::tabPanel("Luminance-Chroma plane",
                        shiny::plotOutput("LC_plot", click = "LC_plot_click"),
                        shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px")
-                       )
+                       ),
+                     shiny::tabPanel("Hue-Chroma plane",
+                       shiny::plotOutput("HC_plot", click = "HC_plot_click"),
+                       shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
+                     )
     )
   )
 }
@@ -158,10 +156,6 @@ color_picker_Server <- function() {
     output$Lgrad <- shiny::renderPlot({
       color_picker_L_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
-
-#    output$hexcolor <- renderPrint({
-#      hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H)))
-#    })
 
   })
 }
