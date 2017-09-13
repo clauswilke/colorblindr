@@ -50,11 +50,15 @@ color_picker_mainPanel <- function() {
    shiny::tabsetPanel(type = "tabs",
                      shiny::tabPanel("Luminance-Chroma plane",
                        shiny::plotOutput("LC_plot", click = "LC_plot_click"),
-                       shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px")
-                       ),
+                       shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
+                       shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
+                       shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
+                     ),
                      shiny::tabPanel("Hue-Chroma plane",
                        shiny::plotOutput("HC_plot", click = "HC_plot_click"),
-                       shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
+                       shiny::plotOutput("Hgrad2", click = "Hgrad_click", height = "50px"),
+                       shiny::plotOutput("Cgrad2", click = "Cgrad_click", height = "50px"),
+                       shiny::plotOutput("Lgrad2", click = "Lgrad_click", height = "50px")
                      )
     )
   )
@@ -149,21 +153,38 @@ color_picker_Server <- function() {
       color_picker_H_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
 
+    output$Hgrad2 <- shiny::renderPlot({
+      color_picker_H_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    })
+
     output$Cgrad <- shiny::renderPlot({
       color_picker_C_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
 
+    output$Cgrad2 <- shiny::renderPlot({
+      color_picker_C_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    })
+
+
     output$Lgrad <- shiny::renderPlot({
       color_picker_L_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
+
+    output$Lgrad2 <- shiny::renderPlot({
+      color_picker_L_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
+    })
+
 
   })
 }
 
 
 color_picker_hue_chroma_plot <- function(L = 75, C = 20, H = 0, n = 200) {
-  U <- seq(-150, 150, length.out = n)
-  V <- seq(150, -150, length.out = n)
+  Cmax <- max(colorspace::max_chroma(0:360, L))
+  Vmax <- Cmax
+  Umax <- Cmax
+  U <- seq(-Umax, Umax, length.out = n)
+  V <- seq(Vmax, -Vmax, length.out = n)
   grid <- expand.grid(U = U, V = V)
   image <- matrix(hex(LUV(L, grid$U, grid$V)), nrow = n, byrow = TRUE)
   grob <- grid::rasterGrob(image)
@@ -173,16 +194,17 @@ color_picker_hue_chroma_plot <- function(L = 75, C = 20, H = 0, n = 200) {
   df_sel <- data.frame(U = sel_pt[2L], V = sel_pt[3L])
 
   ggplot2::ggplot(df_sel, ggplot2::aes(U, V)) + ggplot2::annotation_custom(grob) +
-    ggplot2::geom_point(size = 5, color = "black", fill = hex(sel_col), shape = 21) +
+    ggplot2::geom_point(size = 5, color = cursor_color(L), fill = hex(sel_col), shape = 21) +
     ggplot2::annotate("path",
                       x=C*cos(seq(0, 2*pi, length.out=100)),
-                      y=C*sin(seq(0, 2*pi, length.out=100)), color = "black", size = 0.2, alpha = 0.5) +
-    ggplot2::coord_fixed(xlim = c(-150, 150), ylim = c(-150, 150), expand = FALSE) +
+                      y=C*sin(seq(0, 2*pi, length.out=100)), color = cursor_color(L), size = 0.2, alpha = 0.5) +
+    ggplot2::coord_fixed(xlim = c(-Umax, Umax), ylim = c(-Vmax, Vmax), expand = FALSE) +
     ggplot2::theme_minimal()
 }
 
 color_picker_luminance_chroma_plot <- function(L = 75, C = 20, H = 0, n = 200) {
-  Cseq <- seq(0, 150, length.out = n)
+  Cmax <- max(C + 5, 150)
+  Cseq <- seq(0, Cmax, length.out = n)
   Lseq <- seq(100, 0, length.out = n)
   grid <- expand.grid(C = Cseq, L = Lseq)
   image <- matrix(hex(polarLUV(grid$L, grid$C, H)), nrow = n, byrow = TRUE)
@@ -192,15 +214,15 @@ color_picker_luminance_chroma_plot <- function(L = 75, C = 20, H = 0, n = 200) {
   df_sel <- data.frame(C = C, L = L)
 
   ggplot2::ggplot(df_sel, ggplot2::aes(C, L)) + ggplot2::annotation_custom(grob) +
-    ggplot2::geom_point(size = 5, color = "black", fill = hex(sel_col), shape = 21) +
-    ggplot2::coord_fixed(xlim = c(0, 150), ylim = c(0, 100), expand = FALSE) +
+    ggplot2::geom_point(size = 5, color = cursor_color(L), fill = hex(sel_col), shape = 21) +
+    ggplot2::coord_fixed(xlim = c(0, Cmax), ylim = c(0, 100), expand = FALSE) +
     ggplot2::theme_minimal()
 }
 
 
 
 color_picker_C_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
-  Cmax <- max(150, C+5)
+  Cmax <- max(C + 5, 150)
   Cseq <- seq(0, Cmax, length.out = n)
   image <- matrix(hex(polarLUV(L, Cseq, H)), nrow = 1, byrow = TRUE)
   grob <- grid::rasterGrob(image, width = 1, height = 1)
@@ -210,7 +232,7 @@ color_picker_C_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
 
   y <- 0 # dummy assignment to make CRAN check happy
   ggplot2::ggplot(df_sel, ggplot2::aes(C, y)) + ggplot2::annotation_custom(grob) +
-    ggplot2::geom_point(size = 5, color = "black", fill = sel_col, shape = 21) +
+    ggplot2::geom_point(size = 5, color = cursor_color(L), fill = sel_col, shape = 21) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::scale_x_continuous(limits = c(0, Cmax), expand = c(0, 0)) +
     ggplot2::ylab("C") +
@@ -235,7 +257,7 @@ color_picker_H_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
 
   y <- 0 # dummy assignment to make CRAN check happy
   ggplot2::ggplot(df_sel, ggplot2::aes(H, y)) + ggplot2::annotation_custom(grob) +
-    ggplot2::geom_point(size = 5, color = "black", fill = sel_col, shape = 21) +
+    ggplot2::geom_point(size = 5, color = cursor_color(L), fill = sel_col, shape = 21) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::scale_x_continuous(limits = c(0, 360), expand = c(0, 0)) +
     ggplot2::ylab("H") +
@@ -260,7 +282,7 @@ color_picker_L_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
 
   y <- 0 # dummy assignment to make CRAN check happy
   ggplot2::ggplot(df_sel, ggplot2::aes(L, y)) + ggplot2::annotation_custom(grob) +
-    ggplot2::geom_point(size = 5, color = "black", fill = sel_col, shape = 21) +
+    ggplot2::geom_point(size = 5, color = cursor_color(L), fill = sel_col, shape = 21) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::scale_x_continuous(limits = c(0, 100), expand = c(0, 0)) +
     ggplot2::ylab("L") +
@@ -273,5 +295,9 @@ color_picker_L_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
                    panel.grid.major.y = ggplot2::element_blank(),
                    panel.grid.minor.y = ggplot2::element_blank(),
                    plot.margin = ggplot2::margin(3, 20, 3, 0))
+}
+
+cursor_color <- function(L) {
+  ifelse(L >= 50, "#000000", "#FFFFFF")
 }
 
