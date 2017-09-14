@@ -53,27 +53,23 @@ gg_color_gradient(title="ggplot2 default continuous")
 gg_color_swatches(title="ggplot2 discrete gray") + scale_fill_grey()
 ```
 
-The discrete colorbrewer scales are all called via `scale_fill_brewer(type = "seq", palette = "name")`, where `name` is the name of the palette, e.g. `palette = "Blues"`.
+The continuous viridis scales are all called via `scale_fill_viridis(option = "name")`, where `name` is the name of the palette, e.g. `option = "viridis"`.
 
 ```{r}
-gg_color_swatches(title="colorbrewer discrete sequential: Blues") + scale_fill_brewer(type="seq", palette="Blues")
-gg_color_swatches(title="colorbrewer discrete sequential: BuGn") + scale_fill_brewer(type="seq", palette="BuGn")
-gg_color_swatches(title="colorbrewer discrete sequential: BuPu") + scale_fill_brewer(type="seq", palette="BuPu")
-gg_color_swatches(title="colorbrewer discrete sequential: GnBu") + scale_fill_brewer(type="seq", palette="GnBu")
-gg_color_swatches(title="colorbrewer discrete sequential: Greens") + scale_fill_brewer(type="seq", palette="Greens")
-gg_color_swatches(title="colorbrewer discrete sequential: Greys") + scale_fill_brewer(type="seq", palette="Greys")
-gg_color_swatches(title="colorbrewer discrete sequential: Oranges") + scale_fill_brewer(type="seq", palette="Oranges")
-gg_color_swatches(title="colorbrewer discrete sequential: OrRd") + scale_fill_brewer(type="seq", palette="OrRd")
-gg_color_swatches(title="colorbrewer discrete sequential: PuBu") + scale_fill_brewer(type="seq", palette="PuBu")
-gg_color_swatches(title="colorbrewer discrete sequential: PuBuGn") + scale_fill_brewer(type="seq", palette="PuBuGn")
-gg_color_swatches(title="colorbrewer discrete sequential: PuRd") + scale_fill_brewer(type="seq", palette="PuRd")
-gg_color_swatches(title="colorbrewer discrete sequential: Purples") + scale_fill_brewer(type="seq", palette="Purples")
-gg_color_swatches(title="colorbrewer discrete sequential: RdPu") + scale_fill_brewer(type="seq", palette="RdPu")
-gg_color_swatches(title="colorbrewer discrete sequential: Reds") + scale_fill_brewer(type="seq", palette="Reds")
-gg_color_swatches(title="colorbrewer discrete sequential: YlGn") + scale_fill_brewer(type="seq", palette="YlGn")
-gg_color_swatches(title="colorbrewer discrete sequential: YlGnBu") + scale_fill_brewer(type="seq", palette="YlGnBu")
-gg_color_swatches(title="colorbrewer discrete sequential: YlOrBr") + scale_fill_brewer(type="seq", palette="YlOrBr")
-gg_color_swatches(title="colorbrewer discrete sequential: YlOrRd") + scale_fill_brewer(type="seq", palette="YlOrRd")
+require(viridis)
+gg_color_gradient(title="viridis continuous scale: virids") + scale_fill_viridis(option = "viridis")
+gg_color_gradient(title="viridis continuous scale: magma") + scale_fill_viridis(option = "magma")
+gg_color_gradient(title="viridis continuous scale: inferno") + scale_fill_viridis(option = "inferno")
+gg_color_gradient(title="viridis continuous scale: plasma") + scale_fill_viridis(option = "plasma")
+```
+
+The discrete viridis scales are all called via `scale_fill_viridis(option = "name", discrete = TRUE)`, where `name` is the name of the palette, e.g. `option = "viridis"`.
+
+```{r}
+gg_color_swatches(title="viridis discrete scale: virids") + scale_fill_viridis(option = "viridis", discrete = TRUE)
+gg_color_swatches(title="viridis discrete scale: magma") + scale_fill_viridis(option = "magma", discrete = TRUE)
+gg_color_swatches(title="viridis discrete scale: inferno") + scale_fill_viridis(option = "inferno", discrete = TRUE)
+gg_color_swatches(title="viridis discrete scale: plasma") + scale_fill_viridis(option = "plasma", discrete = TRUE)
 ```
 
 The continuous colorbrewer scales are all called via `scale_fill_distiller(type = "seq", palette = "name")`, where `name` is the name of the palette, e.g. `palette = "Blues"`.
@@ -97,4 +93,62 @@ gg_color_gradient(title="colorbrewer discrete sequential: YlGn") + scale_fill_di
 gg_color_gradient(title="colorbrewer discrete sequential: YlGnBu") + scale_fill_distiller(type="seq", palette="YlGnBu")
 gg_color_gradient(title="colorbrewer discrete sequential: YlOrBr") + scale_fill_distiller(type="seq", palette="YlOrBr")
 gg_color_gradient(title="colorbrewer discrete sequential: YlOrRd") + scale_fill_distiller(type="seq", palette="YlOrRd")
+```
+
+The discrete colorbrewer scales are all called via `scale_fill_brewer(type = "seq", palette = "name")`, where `name` is the name of the palette, e.g. `palette = "Blues"`.
+
+```{r}
+gg_color_swatches(title="colorbrewer discrete sequential: Blues") + scale_fill_brewer(type="seq", palette="Blues")
+gg_color_swatches(title="colorbrewer discrete sequential: BuGn") + scale_fill_brewer(type="seq", palette="BuGn")
+gg_color_swatches(title="colorbrewer discrete sequential: BuPu") + scale_fill_brewer(type="seq", palette="BuPu")
+gg_color_swatches(title="colorbrewer discrete sequential: GnBu") + scale_fill_brewer(type="seq", palette="GnBu")
+gg_color_swatches(title="colorbrewer discrete sequential: Greens") + scale_fill_brewer(type="seq", palette="Greens")
+gg_color_swatches(title="colorbrewer discrete sequential: Greys") + scale_fill_brewer(type="seq", palette="Greys")
+gg_color_swatches(title="colorbrewer discrete sequential: Oranges") + scale_fill_brewer(type="seq", palette="Oranges")
+gg_color_swatches(title="colorbrewer discrete sequential: OrRd") + scale_fill_brewer(type="seq", palette="OrRd")
+gg_color_swatches(title="colorbrewer discrete sequential: PuBu") + scale_fill_brewer(type="seq", palette="PuBu")
+gg_color_swatches(title="colorbrewer discrete sequential: PuBuGn") + scale_fill_brewer(type="seq", palette="PuBuGn")
+gg_color_swatches(title="colorbrewer discrete sequential: PuRd") + scale_fill_brewer(type="seq", palette="PuRd")
+gg_color_swatches(title="colorbrewer discrete sequential: Purples") + scale_fill_brewer(type="seq", palette="Purples")
+gg_color_swatches(title="colorbrewer discrete sequential: RdPu") + scale_fill_brewer(type="seq", palette="RdPu")
+gg_color_swatches(title="colorbrewer discrete sequential: Reds") + scale_fill_brewer(type="seq", palette="Reds")
+gg_color_swatches(title="colorbrewer discrete sequential: YlGn") + scale_fill_brewer(type="seq", palette="YlGn")
+gg_color_swatches(title="colorbrewer discrete sequential: YlGnBu") + scale_fill_brewer(type="seq", palette="YlGnBu")
+gg_color_swatches(title="colorbrewer discrete sequential: YlOrBr") + scale_fill_brewer(type="seq", palette="YlOrBr")
+gg_color_swatches(title="colorbrewer discrete sequential: YlOrRd") + scale_fill_brewer(type="seq", palette="YlOrRd")
+```
+
+## Diverging scales
+
+Diverging scales convey the ordering or magnitude of an effect in two directions. These scales may exist in discrete or continuous forms or both.
+```{r}
+gg_color_gradient(title="ggplot2 gradient2") + scale_fill_gradient2()
+```
+
+The continuous diverging colorbrewer scales are all called via `scale_fill_distiller(type = "div", palette = "BrBG")`, where `name` is the name of the palette, e.g. `palette = "BrBG"`.
+
+```{r}
+gg_color_gradient(title="colorbrewer continuous diverging: BrBG") + scale_fill_distiller(type="div", palette="BrBG")
+gg_color_gradient(title="colorbrewer continuous diverging: BrBG") + scale_fill_distiller(type="div", palette="BrBG")
+gg_color_gradient(title="colorbrewer continuous diverging: PiYG") + scale_fill_distiller(type="div", palette="PiYG")
+gg_color_gradient(title="colorbrewer continuous diverging: PRGn") + scale_fill_distiller(type="div", palette="PRGn")
+gg_color_gradient(title="colorbrewer continuous diverging: PuOr") + scale_fill_distiller(type="div", palette="PuOr")
+gg_color_gradient(title="colorbrewer continuous diverging: RdGy") + scale_fill_distiller(type="div", palette="RdGy")
+gg_color_gradient(title="colorbrewer continuous diverging: RdYlBu") + scale_fill_distiller(type="div", palette="RdYlBu")
+gg_color_gradient(title="colorbrewer continuous diverging: RdYlGn") + scale_fill_distiller(type="div", palette="RdYlGn")
+gg_color_gradient(title="colorbrewer continuous diverging: Spectral") + scale_fill_distiller(type="div", palette="Spectral")
+```
+
+The discrete diverging colorbrewer scales are all called via `scale_fill_brewer(type = "div", palette = "BrBG")`, where `name` is the name of the palette, e.g. `palette = "BrBG"`.
+
+```{r}
+gg_color_swatches(title="colorbrewer discrete diverging: BrBG") + scale_fill_brewer(type="div", palette="BrBG")
+gg_color_swatches(title="colorbrewer discrete diverging: BrBG") + scale_fill_brewer(type="div", palette="BrBG")
+gg_color_swatches(title="colorbrewer discrete diverging: PiYG") + scale_fill_brewer(type="div", palette="PiYG")
+gg_color_swatches(title="colorbrewer discrete diverging: PRGn") + scale_fill_brewer(type="div", palette="PRGn")
+gg_color_swatches(title="colorbrewer discrete diverging: PuOr") + scale_fill_brewer(type="div", palette="PuOr")
+gg_color_swatches(title="colorbrewer discrete diverging: RdGy") + scale_fill_brewer(type="div", palette="RdGy")
+gg_color_swatches(title="colorbrewer discrete diverging: RdYlBu") + scale_fill_brewer(type="div", palette="RdYlBu")
+gg_color_swatches(title="colorbrewer discrete diverging: RdYlGn") + scale_fill_brewer(type="div", palette="RdYlGn")
+gg_color_swatches(title="colorbrewer discrete diverging: Spectral") + scale_fill_brewer(type="div", palette="Spectral")
 ```

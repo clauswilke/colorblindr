@@ -4,7 +4,7 @@
 \alias{gg_color_swatches}
 \title{Generate a set of color swatches to be colored via ggplot2's \code{scale_fill_*} mechanism}
 \usage{
-gg_color_swatches(n = 8, xmargin = 0.2, ymargin = 0, title = NULL,
+gg_color_swatches(n = 10, xmargin = 0.2, ymargin = 0, title = NULL,
   title_size = 14, title_face = "plain",
   plot_margin = margin(title_size/2, title_size/2, title_size/2,
   title_size/2))
