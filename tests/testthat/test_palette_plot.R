@@ -9,11 +9,11 @@ test_that('basic functionality', {
 
   # black labels
   df2 <- layer_data(p, 2L)
-  expect_equal(as.character(df2$label), palette_OkabeIto[c(1, 2, 4)])
+  expect_equal(as.character(df2$label), palette_OkabeIto[c(1:4, 6:8)])
 
   # white labels
   df3 <- layer_data(p, 3L)
-  expect_equal(as.character(df3$label), palette_OkabeIto[c(3, 5:8)])
+  expect_equal(as.character(df3$label), palette_OkabeIto[5])
 
   # label size can be changed
   p <- palette_plot(palette_OkabeIto, label_size = 4)
@@ -35,9 +35,9 @@ test_that('basic functionality', {
 
   # black labels
   df2 <- layer_data(p, 2L)
-  expect_equal(as.character(df2$label), palette_OkabeIto[c(2, 4)])
+  expect_equal(as.character(df2$label), palette_OkabeIto[c(2, 4, 6, 8)])
 
   # white labels
   df3 <- layer_data(p, 3L)
-  expect_equal(as.character(df3$label), palette_OkabeIto[c(6, 8)])
+  expect_equal(as.character(df3$label), as.character(NULL))
 })
