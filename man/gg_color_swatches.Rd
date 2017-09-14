@@ -16,13 +16,13 @@ gg_color_swatches(n, xmargin = 0.2, ymargin = 0, title = NULL,
 
 \item{ymargin}{Fraction of each swatch to be used as margin in the y direction}
 
-\item{title}{Optional title to print above the color swatches}
+\item{title}{Optional title to print above the color swatches. Can also be provided via \link{ggtitle}.}
 
 \item{title_size}{Font size of the title}
 
 \item{title_face}{Font face of the title}
 
-\item{plot_margin}{Margin around the plot, specified via the function \link[ggplot2:margin]{ggplot2::margin}}
+\item{plot_margin}{Margin around the plot, specified via the ggplot2 function \link{margin}}
 }
 \description{
 This function is similar to \link{palette_plot}, with two main differences: First, unlike
@@ -33,4 +33,5 @@ existing ggplot2 color scales.
 }
 \examples{
 gg_color_swatches(8) + scale_fill_OkabeIto()
+gg_color_swatches(10) + ggtitle("Default ggplot2 discrete color scale")
 }

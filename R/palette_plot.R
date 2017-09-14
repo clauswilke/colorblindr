@@ -54,12 +54,13 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE)
 #' @param n Number of color swatches to generate
 #' @param xmargin Fraction of each swatch to be used as margin in the x direction
 #' @param ymargin Fraction of each swatch to be used as margin in the y direction
-#' @param title Optional title to print above the color swatches
+#' @param title Optional title to print above the color swatches. Can also be provided via [ggtitle].
 #' @param title_size Font size of the title
 #' @param title_face Font face of the title
-#' @param plot_margin Margin around the plot, specified via the function [ggplot2::margin]
+#' @param plot_margin Margin around the plot, specified via the ggplot2 function [margin]
 #' @examples
 #' gg_color_swatches(8) + scale_fill_OkabeIto()
+#' gg_color_swatches(10) + ggtitle("Default ggplot2 discrete color scale")
 #' @importFrom ggplot2 ggplot aes geom_rect theme element_text scale_x_continuous scale_y_continuous ggtitle margin
 #' @export
 gg_color_swatches <- function(n, xmargin = 0.2, ymargin = 0,
@@ -75,18 +76,15 @@ gg_color_swatches <- function(n, xmargin = 0.2, ymargin = 0,
   # code to appease CRAN check
   xmax <- xmin <- ymax <- ymin <- fill <- NULL
 
-  g <- ggplot() +
+  ggplot() +
     geom_rect(data=tiles, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill=fill)) +
     scale_x_continuous(limits = c(xmargin/(2*n), 1-xmargin/(2*n)), expand = c(0, 0)) +
     scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
-    cowplot::theme_nothing() + theme(plot.margin = plot_margin)
-
-  if (!is.null(title)) {
-    g <- g + ggtitle(title) +
-      theme(plot.title = element_text(face = title_face,
-                                      size = title_size,
-                                      margin = margin(b = title_size/2),
-                                      hjust = 0, vjust = 0.5))
-  }
-  g
+    ggtitle(title) +
+    cowplot::theme_nothing() +
+    theme(plot.margin = plot_margin,
+          plot.title = element_text(face = title_face,
+                                    size = title_size,
+                                    margin = margin(b = title_size/2),
+                                    hjust = 0, vjust = 0.5))
 }
