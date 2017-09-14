@@ -5,17 +5,19 @@
 \alias{scale_color_OkabeIto}
 \alias{scale_fill_OkabeIto}
 \alias{scale_OkabeIto}
-\title{Okabe Ito color scale}
+\title{Okabe-Ito color scale}
 \arguments{
 \item{use_black}{If \code{TRUE}, scale includes black, otherwise includes gray.}
+
+\item{order}{Numeric vector listing the order in which the colors should be used. Default is 1:8.}
 }
 \description{
-See \link{palette_OkabeIto} for details on the color palette used.
+This is a color-blind friendly, qualitative scale with eight different colors. See \link{palette_OkabeIto} for details.
 }
 \examples{
 library(ggplot2)
 ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
   geom_point() + scale_color_OkabeIto()
 ggplot(iris, aes(Sepal.Length, fill = Species)) +
-  geom_density(alpha = 0.7) + scale_fill_OkabeIto()
+  geom_density(alpha = 0.7) + scale_fill_OkabeIto(order = c(1, 3, 5))
 }

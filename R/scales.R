@@ -17,24 +17,25 @@ scale_fill_OkabeIto <- function(...) {
   scale_OkabeIto("fill", ...)
 }
 
-#' Okabe Ito color scale
+#' Okabe-Ito color scale
 #'
-#' See [palette_OkabeIto] for details on the color palette used.
+#' This is a color-blind friendly, qualitative scale with eight different colors. See [palette_OkabeIto] for details.
 #' @param use_black If `TRUE`, scale includes black, otherwise includes gray.
+#' @param order Numeric vector listing the order in which the colors should be used. Default is 1:8.
 #' @examples
 #' library(ggplot2)
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
 #'   geom_point() + scale_color_OkabeIto()
 #' ggplot(iris, aes(Sepal.Length, fill = Species)) +
-#'   geom_density(alpha = 0.7) + scale_fill_OkabeIto()
+#'   geom_density(alpha = 0.7) + scale_fill_OkabeIto(order = c(1, 3, 5))
 #' @export
 #' @usage NULL
-scale_OkabeIto <- function(aesthetic, use_black = FALSE, ...) {
+scale_OkabeIto <- function(aesthetic, use_black = FALSE, order = 1:8, ...) {
   if (use_black) {
-    values <- palette_OkabeIto_black
+    values <- palette_OkabeIto_black[order]
   }
   else {
-    values <- palette_OkabeIto
+    values <- palette_OkabeIto[order]
   }
   pal <- function(n) {
     if (n > length(values)) {

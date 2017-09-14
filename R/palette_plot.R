@@ -40,5 +40,53 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE)
     scale_fill_manual(values=colors) +
     geom_text(data=tiles[tiles$light & color_labels,], aes(x, y, label=color), color="black", size=label_size) +
     geom_text(data=tiles[!tiles$light & color_labels,], aes(x, y, label=color), color="white", size=label_size) +
-    cowplot::theme_nothing() + theme(legend.position = "none")
+    cowplot::theme_nothing()
+}
+
+
+#' Generate a set of color swatches to be colored via ggplot2's `scale_fill_*` mechanism
+#'
+#' This function is similar to [palette_plot], with two main differences: First, unlike
+#' [palette_plot], `gg_color_swatches` cannot label the colors with their hex code. Second, the colors don't
+#' need to be provided as an argument, the resulting plot can be directly styled by adding
+#' a `scale_fill_*` expression. Thus, this function is particularly useful to visualize
+#' existing ggplot2 color scales.
+#' @param n Number of color swatches to generate
+#' @param xmargin Fraction of each swatch to be used as margin in the x direction
+#' @param ymargin Fraction of each swatch to be used as margin in the y direction
+#' @param title Optional title to print above the color swatches
+#' @param title_size Font size of the title
+#' @param title_face Font face of the title
+#' @param plot_margin Margin around the plot, specified via the function [ggplot2::margin]
+#' @examples
+#' gg_color_swatches(8) + scale_fill_OkabeIto()
+#' @importFrom ggplot2 ggplot aes geom_rect theme element_text scale_x_continuous scale_y_continuous ggtitle margin
+#' @export
+gg_color_swatches <- function(n, xmargin = 0.2, ymargin = 0,
+                              title = NULL, title_size = 14, title_face = "plain",
+                              plot_margin = margin(title_size/2, title_size/2, title_size/2, title_size/2))
+{
+  tiles <- data.frame(xmin=(0:(n-1)+xmargin/2)/n,
+                      xmax=((1:n)-xmargin/2)/n,
+                      ymin=rep(0, n)+ymargin/2,
+                      ymax=rep(1, n)-ymargin/2,
+                      fill=factor(1:n))
+
+  # code to appease CRAN check
+  xmax <- xmin <- ymax <- ymin <- fill <- NULL
+
+  g <- ggplot() +
+    geom_rect(data=tiles, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill=fill)) +
+    scale_x_continuous(limits = c(xmargin/(2*n), 1-xmargin/(2*n)), expand = c(0, 0)) +
+    scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+    cowplot::theme_nothing() + theme(plot.margin = plot_margin)
+
+  if (!is.null(title)) {
+    g <- g + ggtitle(title) +
+      theme(plot.title = element_text(face = title_face,
+                                      size = title_size,
+                                      margin = margin(b = title_size/2),
+                                      hjust = 0, vjust = 0.5))
+  }
+  g
 }
