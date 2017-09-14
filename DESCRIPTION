@@ -41,7 +41,7 @@ Collate:
     'scales.R'
     'simulate_cvd.R'
     'palettes.R'
-    'palette_plot.R'
+    'gg_color_swatches.R'
     'utils.R'
     'view_cvd.R'
 RoxygenNote: 6.0.1

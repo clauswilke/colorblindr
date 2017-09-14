@@ -39,7 +39,7 @@ scale_OkabeIto <- function(aesthetic, use_black = FALSE, order = 1:8, ...) {
   }
   pal <- function(n) {
     if (n > length(values)) {
-      stop("Insufficient values in manual scale. ", n, " needed but only ",
+      warning("Insufficient values in manual scale. ", n, " needed but only ",
            length(values), " provided.", call. = FALSE)
     }
     values
