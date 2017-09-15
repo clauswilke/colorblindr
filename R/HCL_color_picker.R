@@ -184,17 +184,17 @@ color_picker_Server <- function() {
 
     # generate palette plot with given hex code
     output$palette_plot <- shiny::renderPlot({
-      if (length(picked_color_list$cl) !=0){
+      if (length(picked_color_list$cl) != 0){
         palette_plot(picked_color_list$cl)
       }
     })
 
     # add R color code line
     output$palette_line <- shiny::renderText({
-      if (length(picked_color_list$cl) !=0){
+      if (length(picked_color_list$cl) != 0){
         color_list <- picked_color_list$cl
-        color_list <- paste(color_list, collapse="','")
-        color_string <-  paste("c('",color_list,"')", sep='')
+        color_list <- paste(color_list, collapse = "', '")
+        color_string <- paste("c('", color_list, "')", sep = '')
         color_string
       }else{
         'No color being picked'
@@ -203,12 +203,22 @@ color_picker_Server <- function() {
 
     # save color code
     observeEvent(input$color_picker, {
-      picked_color_list$cl <- c(picked_color_list$cl,as.character(input$hexcolor))
+      shiny::validate(
+        shiny::need(match(input$hexcolor,
+                          picked_color_list$cl,
+                          nomatch = 0) == 0 ,
+        'Hex color already in color list')
+      )
+      picked_color_list$cl <- c(picked_color_list$cl, input$hexcolor)
     })
 
     # undo pick color
     observeEvent(input$color_unpicker, {
-      picked_color_list$cl <- head(picked_color_list$cl,-1)
+      if (input$hexcolor %in% picked_color_list$cl){
+        picked_color_list$cl <- picked_color_list$cl[picked_color_list$cl != input$hexcolor]
+      }else{
+        picked_color_list$cl <- head(picked_color_list$cl,-1)
+      }
     })
 
     # clear saved color code
