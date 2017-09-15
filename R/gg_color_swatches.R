@@ -72,7 +72,7 @@ gg_color_swatches <- function(n = 10, xmargin = 0.2, ymargin = 0,
 
   ggplot() +
     geom_rect(data=tiles, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill=fill)) +
-    scale_x_continuous(limits = c(xmargin/(2*n), 1-xmargin/(2*n)), expand = c(0, 0)) +
+    scale_x_continuous(limits = c(.99*xmargin/(2*n), 1-.99*xmargin/(2*n)), expand = c(0, 0)) +
     scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
     ggtitle(title) +
     cowplot::theme_nothing() +
