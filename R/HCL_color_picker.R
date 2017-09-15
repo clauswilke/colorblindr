@@ -40,7 +40,10 @@ color_picker_sidebarPanel <- function() {
     shiny::textInput("hexcolor", "RGB hex color", hex(polarLUV(60, 40, 60))),
     shiny::htmlOutput("colorbox"),
     # script to catch keystrokes
-    shiny::tags$script('$(document).on("keydown", function (e) {Shiny.onInputChange("lastkeypresscode", e.keyCode);});')
+    shiny::tags$script('$(document).on("keydown", function (e) {Shiny.onInputChange("lastkeypresscode", e.keyCode);});'),
+    shiny::actionButton("color_picker", "Pick"),
+    shiny::actionButton("color_unpicker", "Unpick"),
+    shiny::actionButton("clear_color_picker", "Clear")
   )
 }
 
@@ -59,6 +62,10 @@ color_picker_mainPanel <- function() {
                        shiny::plotOutput("Hgrad2", click = "Hgrad_click", height = "50px"),
                        shiny::plotOutput("Cgrad2", click = "Cgrad_click", height = "50px"),
                        shiny::plotOutput("Lgrad2", click = "Lgrad_click", height = "50px")
+                     ),
+                     shiny::tabPanel("Color palette",
+                       shiny::plotOutput("palette_plot", height = "50px"),
+                       shiny::textOutput("palette_line")
                      )
     )
   )
@@ -68,6 +75,7 @@ color_picker_mainPanel <- function() {
 color_picker_Server <- function() {
   shiny::shinyServer(function(input, output, session) {
 
+    picked_color_list <- shiny::reactiveValues(cl=c())
     shiny::observeEvent({input$HC_plot_click}, {
       # store the old colors
       coords_old_LUV <- coords(as(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H)), "LUV"))
@@ -174,7 +182,49 @@ color_picker_Server <- function() {
       color_picker_L_gradient(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H))
     })
 
+    # generate palette plot with given hex code
+    output$palette_plot <- shiny::renderPlot({
+      if (length(picked_color_list$cl) != 0){
+        palette_plot(picked_color_list$cl)
+      }
+    })
 
+    # add R color code line
+    output$palette_line <- shiny::renderText({
+      if (length(picked_color_list$cl) != 0){
+        color_list <- picked_color_list$cl
+        color_list <- paste(color_list, collapse = "', '")
+        color_string <- paste("c('", color_list, "')", sep = '')
+        color_string
+      }else{
+        'No color being picked'
+      }
+    })
+
+    # save color code
+    observeEvent(input$color_picker, {
+      shiny::validate(
+        shiny::need(match(input$hexcolor,
+                          picked_color_list$cl,
+                          nomatch = 0) == 0 ,
+        'Hex color already in color list')
+      )
+      picked_color_list$cl <- c(picked_color_list$cl, input$hexcolor)
+    })
+
+    # undo pick color
+    observeEvent(input$color_unpicker, {
+      if (input$hexcolor %in% picked_color_list$cl){
+        picked_color_list$cl <- picked_color_list$cl[picked_color_list$cl != input$hexcolor]
+      }else{
+        picked_color_list$cl <- head(picked_color_list$cl,-1)
+      }
+    })
+
+    # clear saved color code
+    observeEvent(input$clear_color_picker, {
+      picked_color_list$cl <- c()
+    })
   })
 }
 
