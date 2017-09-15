@@ -43,31 +43,31 @@ color_picker_sidebarPanel <- function() {
     shiny::tags$script('$(document).on("keydown", function (e) {Shiny.onInputChange("lastkeypresscode", e.keyCode);});'),
     shiny::actionButton("color_picker", "Pick"),
     shiny::actionButton("color_unpicker", "Unpick"),
-    shiny::actionButton("clear_color_picker", "Clear")
+    shiny::actionButton("clear_color_picker", "Clear palette")
   )
 }
 
 
 color_picker_mainPanel <- function() {
   shiny::mainPanel(
-   shiny::tabsetPanel(type = "tabs",
-                     shiny::tabPanel("Luminance-Chroma plane",
-                       shiny::plotOutput("LC_plot", click = "LC_plot_click"),
-                       shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
-                       shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
-                       shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
-                     ),
-                     shiny::tabPanel("Hue-Chroma plane",
-                       shiny::plotOutput("HC_plot", click = "HC_plot_click"),
-                       shiny::plotOutput("Hgrad2", click = "Hgrad_click", height = "50px"),
-                       shiny::plotOutput("Cgrad2", click = "Cgrad_click", height = "50px"),
-                       shiny::plotOutput("Lgrad2", click = "Lgrad_click", height = "50px")
-                     ),
-                     shiny::tabPanel("Color palette",
-                       shiny::plotOutput("palette_plot", height = "50px"),
-                       shiny::textOutput("palette_line")
-                     )
-    )
+    shiny::tabsetPanel(type = "tabs",
+      shiny::tabPanel("Luminance-Chroma plane",
+        shiny::plotOutput("LC_plot", click = "LC_plot_click"),
+        shiny::plotOutput("Hgrad", click = "Hgrad_click", height = "50px"),
+        shiny::plotOutput("Cgrad", click = "Cgrad_click", height = "50px"),
+        shiny::plotOutput("Lgrad", click = "Lgrad_click", height = "50px")
+      ),
+      shiny::tabPanel("Hue-Chroma plane",
+        shiny::plotOutput("HC_plot", click = "HC_plot_click"),
+        shiny::plotOutput("Hgrad2", click = "Hgrad_click", height = "50px"),
+        shiny::plotOutput("Cgrad2", click = "Cgrad_click", height = "50px"),
+        shiny::plotOutput("Lgrad2", click = "Lgrad_click", height = "50px")
+      )
+    ),
+    shiny::br(),
+    shiny::h3("Color palette"),
+    shiny::plotOutput("palette_plot", click = "palette_click", height = "50px"),
+    shiny::textOutput("palette_line")
   )
 }
 
@@ -100,6 +100,18 @@ color_picker_Server <- function() {
       shiny::updateSliderInput(session, "C", value = round(C))
       shiny::updateSliderInput(session, "L", value = round(L))
     })
+
+    shiny::observeEvent({input$palette_click}, {
+      x <- input$palette_click$x
+      if (is.null(x)) return()
+      i <- ceiling(x*length(picked_color_list$cl))
+      col_RGB <- hex2RGB(picked_color_list$cl[i])
+      coords_HCL <- coords(as(col_RGB, "polarLUV"))
+      shiny::updateSliderInput(session, "L", value = round(coords_HCL[1L]))
+      shiny::updateSliderInput(session, "C", value = round(coords_HCL[2L]))
+      shiny::updateSliderInput(session, "H", value = round(coords_HCL[3L]))
+    })
+
 
 
     shiny::observeEvent({input$Hgrad_click}, {
@@ -194,10 +206,10 @@ color_picker_Server <- function() {
       if (length(picked_color_list$cl) != 0){
         color_list <- picked_color_list$cl
         color_list <- paste(color_list, collapse = "', '")
-        color_string <- paste("c('", color_list, "')", sep = '')
+        color_string <- paste("Color list: c('", color_list, "')", sep = '')
         color_string
       }else{
-        'No color being picked'
+        'Color list: N/A'
       }
     })
 
@@ -217,7 +229,8 @@ color_picker_Server <- function() {
       if (input$hexcolor %in% picked_color_list$cl){
         picked_color_list$cl <- picked_color_list$cl[picked_color_list$cl != input$hexcolor]
       }else{
-        picked_color_list$cl <- head(picked_color_list$cl,-1)
+       # It's a better user interface to leave the list alone if the color is not in the list
+       # picked_color_list$cl <- head(picked_color_list$cl,-1)
       }
     })
 
