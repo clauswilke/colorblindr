@@ -22,6 +22,8 @@ scale_fill_OkabeIto <- function(...) {
 #' This is a color-blind friendly, qualitative scale with eight different colors. See [palette_OkabeIto] for details.
 #' @param use_black If `TRUE`, scale includes black, otherwise includes gray.
 #' @param order Numeric vector listing the order in which the colors should be used. Default is 1:8.
+#' @param ... common discrete scale parameters: `name`, `breaks`, `labels`, `na.value`, `limits` and `guide`. See
+#'  [discrete_scale] for more details.
 #' @examples
 #' library(ggplot2)
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
