@@ -216,9 +216,11 @@ color_picker_Server <- function() {
     # save color code
     observeEvent(input$color_picker, {
       shiny::validate(
+        # only execute this on complete color hex codes or not duplicated hex code
         shiny::need(match(input$hexcolor,
                           picked_color_list$cl,
-                          nomatch = 0) == 0 ,
+                          nomatch = 0) == 0 &
+                    grepl("^#[0123456789ABCDEFabcdef]{6}$", input$hexcolor),
         'Hex color already in color list')
       )
       picked_color_list$cl <- c(picked_color_list$cl, input$hexcolor)
