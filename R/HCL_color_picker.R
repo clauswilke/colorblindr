@@ -154,16 +154,13 @@ color_picker_Server <- function() {
 
     # save color code
     observeEvent(input$color_picker, {
-      shiny::validate(
-        # only execute this on complete color hex codes or not duplicated hex code
-        shiny::need(match(input$hexcolor,
-                          picked_color_list$cl,
-                          nomatch = 0) == 0,
-                    'Hex code already in color list'),
-        need(grepl("^#[0123456789ABCDEFabcdef]{6}$", input$hexcolor),
-             'Invalid Hex code')
-      )
-      picked_color_list$cl <- c(picked_color_list$cl, input$hexcolor)
+      # cannot rely on hex color in text-input field, so recalculate from set H, C, L values
+      hexcolor <- hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H)))
+
+      # only add color if it's not already in the list
+      if (! hexcolor %in% picked_color_list$cl) {
+        picked_color_list$cl <- c(picked_color_list$cl, hexcolor)
+      }
     })
 
     # undo pick color
