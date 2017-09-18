@@ -7,6 +7,8 @@
 #' @export
 #' @importFrom colorspace polarLUV LUV hex coords hex2RGB
 #' @importFrom methods as
+#' @author Claus O. Wilke wilke@austin.utexas.edu
+#' @author Douglas C. Wu @wckdouglas (color-palette feature)
 HCL_color_picker <- function() {
   app <- shiny::shinyApp(ui = color_picker_UI(), server = color_picker_Server())
   shiny::runApp(app)
@@ -37,10 +39,15 @@ color_picker_sidebarPanel <- function() {
                        min = 0, max = 180, value = 40),
     shiny::sliderInput("L", "Luminance",
                        min = 0, max = 100, value = 60),
-    shiny::textInput("hexcolor", "RGB hex color", hex(polarLUV(60, 40, 60))),
+    shiny::splitLayout(
+      shiny::textInput("hexcolor", "RGB hex color", hex(polarLUV(60, 40, 60))),
+      shiny::div(class = 'form-group shiny-input-container',
+        shiny::actionButton("set_hexcolor", "Set")
+      ),
+      cellWidths = c("70%", "30%"),
+      cellArgs = list(style = "vertical-align: bottom;")
+    ),
     shiny::htmlOutput("colorbox"),
-    # script to catch keystrokes
-    shiny::tags$script('$(document).on("keydown", function (e) {Shiny.onInputChange("lastkeypresscode", e.keyCode);});'),
     shiny::actionButton("color_picker", "Pick"),
     shiny::actionButton("color_unpicker", "Unpick"),
     shiny::actionButton("clear_color_picker", "Clear palette")
@@ -112,8 +119,6 @@ color_picker_Server <- function() {
       shiny::updateSliderInput(session, "H", value = round(coords_HCL[3L]))
     })
 
-
-
     shiny::observeEvent({input$Hgrad_click}, {
       H <- input$Hgrad_click$x
       if (!is.null(H)) {
@@ -135,18 +140,41 @@ color_picker_Server <- function() {
       }
     })
 
-    shiny::observeEvent({input$hexcolor}, {
-      # only execute after key has been pressed
-      if(!is.null(input$lastkeypresscode)) {
-        # only execute this on complete color hex codes
-        if (grepl("^#[0123456789ABCDEFabcdef]{6}$", input$hexcolor)) {
-            col_RGB <- hex2RGB(input$hexcolor)
-            coords_HCL <- coords(as(col_RGB, "polarLUV"))
-            shiny::updateSliderInput(session, "L", value = round(coords_HCL[1L]))
-            shiny::updateSliderInput(session, "C", value = round(coords_HCL[2L]))
-            shiny::updateSliderInput(session, "H", value = round(coords_HCL[3L]))
-        }
+    shiny::observeEvent({input$set_hexcolor}, {
+      # only execute this on complete color hex codes
+      if (grepl("^#[0123456789ABCDEFabcdef]{6}$", input$hexcolor)) {
+          col_RGB <- hex2RGB(input$hexcolor)
+          coords_HCL <- coords(as(col_RGB, "polarLUV"))
+          shiny::updateSliderInput(session, "L", value = round(coords_HCL[1L]))
+          shiny::updateSliderInput(session, "C", value = round(coords_HCL[2L]))
+          shiny::updateSliderInput(session, "H", value = round(coords_HCL[3L]))
       }
+    })
+
+    # save color code
+    observeEvent(input$color_picker, {
+      shiny::validate(
+        shiny::need(match(input$hexcolor,
+                          picked_color_list$cl,
+                          nomatch = 0) == 0 ,
+                    'Hex color already in color list')
+      )
+      picked_color_list$cl <- c(picked_color_list$cl, input$hexcolor)
+    })
+
+    # undo pick color
+    observeEvent(input$color_unpicker, {
+      if (input$hexcolor %in% picked_color_list$cl){
+        picked_color_list$cl <- picked_color_list$cl[picked_color_list$cl != input$hexcolor]
+      }else{
+        # It's a better user interface to leave the list alone if the color is not in the list
+        # picked_color_list$cl <- head(picked_color_list$cl,-1)
+      }
+    })
+
+    # clear saved color code
+    observeEvent(input$clear_color_picker, {
+      picked_color_list$cl <- c()
     })
 
     shiny::observe({
@@ -211,32 +239,6 @@ color_picker_Server <- function() {
       }else{
         'Color list: N/A'
       }
-    })
-
-    # save color code
-    observeEvent(input$color_picker, {
-      shiny::validate(
-        shiny::need(match(input$hexcolor,
-                          picked_color_list$cl,
-                          nomatch = 0) == 0 ,
-        'Hex color already in color list')
-      )
-      picked_color_list$cl <- c(picked_color_list$cl, input$hexcolor)
-    })
-
-    # undo pick color
-    observeEvent(input$color_unpicker, {
-      if (input$hexcolor %in% picked_color_list$cl){
-        picked_color_list$cl <- picked_color_list$cl[picked_color_list$cl != input$hexcolor]
-      }else{
-       # It's a better user interface to leave the list alone if the color is not in the list
-       # picked_color_list$cl <- head(picked_color_list$cl,-1)
-      }
-    })
-
-    # clear saved color code
-    observeEvent(input$clear_color_picker, {
-      picked_color_list$cl <- c()
     })
   })
 }

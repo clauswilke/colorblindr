@@ -44,9 +44,9 @@ gg_color_swatches(title="colorbrewer qualitative: Set2") + scale_fill_brewer(typ
 gg_color_swatches(title="colorbrewer qualitative: Set3") + scale_fill_brewer(type="qual", palette="Set3")
 ```
 
-## Directional scales
+## Sequential scales
 
-Directional scales convey the ordering or magnitude of an effect. These scales may exist in discrete or continuous forms or both.
+Sequential scales convey the ordering or magnitude of an effect. These scales may exist in discrete or continuous forms or both.
 
 ```{r}
 gg_color_gradient(title="ggplot2 default continuous")
@@ -125,7 +125,7 @@ Diverging scales convey the ordering or magnitude of an effect in two directions
 gg_color_gradient(title="ggplot2 gradient2") + scale_fill_gradient2()
 ```
 
-The continuous diverging colorbrewer scales are all called via `scale_fill_distiller(type = "div", palette = "BrBG")`, where `name` is the name of the palette, e.g. `palette = "BrBG"`.
+The continuous diverging colorbrewer scales are all called via `scale_fill_distiller(type = "div", palette = "name")`, where `name` is the name of the palette, e.g. `palette = "BrBG"`.
 
 ```{r}
 gg_color_gradient(title="colorbrewer continuous diverging: BrBG") + scale_fill_distiller(type="div", palette="BrBG")
@@ -139,7 +139,7 @@ gg_color_gradient(title="colorbrewer continuous diverging: RdYlGn") + scale_fill
 gg_color_gradient(title="colorbrewer continuous diverging: Spectral") + scale_fill_distiller(type="div", palette="Spectral")
 ```
 
-The discrete diverging colorbrewer scales are all called via `scale_fill_brewer(type = "div", palette = "BrBG")`, where `name` is the name of the palette, e.g. `palette = "BrBG"`.
+The discrete diverging colorbrewer scales are all called via `scale_fill_brewer(type = "div", palette = "name")`, where `name` is the name of the palette, e.g. `palette = "BrBG"`.
 
 ```{r}
 gg_color_swatches(title="colorbrewer discrete diverging: BrBG") + scale_fill_brewer(type="div", palette="BrBG")

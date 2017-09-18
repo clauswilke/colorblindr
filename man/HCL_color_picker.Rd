@@ -14,3 +14,8 @@ Shiny app to pick colors in HCL space
 HCL_color_picker()
 }
 }
+\author{
+Claus O. Wilke wilke@austin.utexas.edu
+
+Douglas C. Wu @wckdouglas (color-palette feature)
+}
