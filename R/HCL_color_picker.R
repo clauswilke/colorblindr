@@ -153,7 +153,7 @@ color_picker_Server <- function() {
 
 
     # save color code
-    observeEvent(input$color_picker, {
+    shiny::observeEvent(input$color_picker, {
       # cannot rely on hex color in text-input field, so recalculate from set H, C, L values
       hexcolor <- hex(polarLUV(as.numeric(input$L), as.numeric(input$C), as.numeric(input$H)))
 
@@ -164,7 +164,7 @@ color_picker_Server <- function() {
     })
 
     # undo pick color
-    observeEvent(input$color_unpicker, {
+    shiny::observeEvent(input$color_unpicker, {
       if (input$hexcolor %in% picked_color_list$cl){
         picked_color_list$cl <- picked_color_list$cl[picked_color_list$cl != input$hexcolor]
       }else{
@@ -174,7 +174,7 @@ color_picker_Server <- function() {
     })
 
     # clear saved color code
-    observeEvent(input$clear_color_picker, {
+    shiny::observeEvent(input$clear_color_picker, {
       picked_color_list$cl <- c()
     })
 
@@ -226,7 +226,7 @@ color_picker_Server <- function() {
     # generate palette plot with given hex code
     output$palette_plot <- shiny::renderPlot({
       if (length(picked_color_list$cl) != 0){
-        palette_plot(picked_color_list$cl)
+        pal_plot(picked_color_list$cl)
       }
     })
 
@@ -361,6 +361,23 @@ color_picker_L_gradient <- function(L = 75, C = 20, H = 0, n = 100) {
                    panel.grid.major.y = ggplot2::element_blank(),
                    panel.grid.minor.y = ggplot2::element_blank(),
                    plot.margin = ggplot2::margin(3, 20, 3, 0))
+}
+
+#' @importFrom colorspace hex2RGB
+pal_plot <- function(colors)
+{
+  # convert colors to hex and find luminance for each
+  col <- hex2RGB(colors)
+  col <- as(col, "LUV")
+  text_col <- cursor_color(col@coords[, 1L])
+
+  n <- length(colors)
+  graphics::par(mai = c(0, 0, 0, 0),
+      mar = c(0, 0, 0, 0))
+  graphics::plot(0, 0, type="n", xlim = c(0, 1), ylim = c(0, 1),
+       xaxs = "i", yaxs = "i", axes = FALSE, xlab = "", ylab="")
+  graphics::rect((0:(n-1)+.1)/n, 0, (1:n-.1)/n, 1, col = colors, border = NA)
+  graphics::text((0:(n-1)+.5)/n, .5, labels = colors, col = text_col, cex = 1.2)
 }
 
 cursor_color <- function(L) {

@@ -97,7 +97,7 @@ gg_color_swatches <- function(n = 10, xmargin = 0.2, ymargin = 0,
 #' @param plot_margin Margin around the plot, specified via the ggplot2 function [margin]
 #' @examples
 #' gg_color_gradient() + ggtitle("Default ggplot2 continuous color scale")
-#' @importFrom ggplot2 ggplot aes geom_rect theme element_text scale_x_continuous scale_y_continuous ggtitle margin
+#' @importFrom ggplot2 ggplot aes geom_raster theme element_text scale_x_continuous scale_y_continuous ggtitle margin
 #' @export
 gg_color_gradient <- function(n = 200, ymargin = 0,
                               title = NULL, title_size = 14, title_face = "plain",
