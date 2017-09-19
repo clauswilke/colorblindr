@@ -25,7 +25,7 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE, ...)
   n <- length(colors)
   tiles <- data.frame(x=(0:(n-1)+.5)/n,
                       y=rep(0.5, n),
-                      color=factor(colors, levels=colors),
+                      color=colors,
                       light=light)
 
   # code to appease CRAN check
