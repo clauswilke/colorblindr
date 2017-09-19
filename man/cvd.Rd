@@ -10,4 +10,7 @@
 \description{
 Color vision deficiency (cvd) conversion tables
 }
+\author{
+Claire D. McWhite @clairemcwhite
+}
 \keyword{datasets}

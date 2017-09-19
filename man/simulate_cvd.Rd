@@ -20,6 +20,9 @@ This function takes valid R colors and transforms them according to a cvd transf
  tritanomaly_cvd['6'][[1]])
 
 }
+\author{
+Claire D. McWhite @clairemcwhite
+}
 \keyword{colorblind}
 \keyword{colors,}
 \keyword{cvd,}

@@ -9,6 +9,7 @@
 #' @format NULL
 #' @usage NULL
 #' @export
+#' @author Claire D. McWhite @clairemcwhite
 protanomaly_cvd <- list(
   "0" = matrix(c(
     1.000000,  0.000000, -0.000000,

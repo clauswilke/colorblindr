@@ -14,3 +14,8 @@ tritan(colors, sev = 1)
 \description{
 Convert colors using the tritan model of colorblindness
 }
+\author{
+Claire D. McWhite @clairemcwhite
+
+Claus O. Wilke wilke@austin.utexas.edu
+}

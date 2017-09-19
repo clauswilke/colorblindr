@@ -12,3 +12,8 @@ tritan_transform(sev = 1)
 \description{
 Generate color transformation matrices using the tritan model of colorblindness
 }
+\author{
+Claire D. McWhite @clairemcwhite
+
+Claus O. Wilke wilke@austin.utexas.edu
+}

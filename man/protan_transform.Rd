@@ -12,3 +12,8 @@ protan_transform(sev = 1)
 \description{
 Generate color transformation matrices using the protan model of colorblindness
 }
+\author{
+Claire D. McWhite @clairemcwhite
+
+Claus O. Wilke wilke@austin.utexas.edu
+}

@@ -11,6 +11,7 @@
 #'  tritanomaly_cvd['6'][[1]])
 #'
 #' @importFrom grDevices col2rgb
+#' @author Claire D. McWhite @clairemcwhite
 simulate_cvd <- function(col, cvd_transform) {
   #Adapted from desaturate
 
