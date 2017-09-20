@@ -10,7 +10,7 @@ desaturate <- colorspace::desaturate
 #'
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
-#' @author Claire D. McWhite @clairemcwhite
+#' @author Claire D. McWhite claire.d.mcwhite@gmail.com
 #' @author Claus O. Wilke wilke@austin.utexas.edu
 deutan_transform <- function(sev = 1) {
   if (sev <= 0) {
@@ -35,7 +35,7 @@ deutan_transform <- function(sev = 1) {
 #' @param colors Vector of colors to convert
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
-#' @author Claire D. McWhite @clairemcwhite
+#' @author Claire D. McWhite claire.d.mcwhite@gmail.com
 #' @author Claus O. Wilke wilke@austin.utexas.edu
 deutan <- function(colors, sev = 1) {
   simulate_cvd(colors, cvd_transform=deutan_transform(sev))
@@ -45,7 +45,7 @@ deutan <- function(colors, sev = 1) {
 #'
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
-#' @author Claire D. McWhite @clairemcwhite
+#' @author Claire D. McWhite claire.d.mcwhite@gmail.com
 #' @author Claus O. Wilke wilke@austin.utexas.edu
 protan_transform <- function(sev = 1) {
   if (sev <= 0) {
@@ -70,7 +70,7 @@ protan_transform <- function(sev = 1) {
 #' @param colors Vector of colors to convert
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
-#' @author Claire D. McWhite @clairemcwhite
+#' @author Claire D. McWhite claire.d.mcwhite@gmail.com
 #' @author Claus O. Wilke wilke@austin.utexas.edu
 protan <- function(colors, sev = 1) {
   simulate_cvd(colors, cvd_transform = protan_transform(sev))
@@ -80,7 +80,7 @@ protan <- function(colors, sev = 1) {
 #'
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
-#' @author Claire D. McWhite @clairemcwhite
+#' @author Claire D. McWhite claire.d.mcwhite@gmail.com
 #' @author Claus O. Wilke wilke@austin.utexas.edu
 tritan_transform <- function(sev = 1) {
   if (sev <= 0) {
@@ -105,7 +105,7 @@ tritan_transform <- function(sev = 1) {
 #' @param colors Vector of colors to convert
 #' @param sev Severity of the color vision defect, a number between 0 and 1
 #' @export
-#' @author Claire D. McWhite @clairemcwhite
+#' @author Claire D. McWhite claire.d.mcwhite@gmail.com
 #' @author Claus O. Wilke wilke@austin.utexas.edu
 tritan <- function(colors, sev = 1){
   simulate_cvd(colors, cvd_transform=tritan_transform(sev))
