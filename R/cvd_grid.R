@@ -19,9 +19,7 @@ cvd_grid <- function(plot, severity = 1)
   des <- function(c) desaturate(c, severity)
   p4 <- edit_colors(plot, des)
 
-  cowplot::plot_grid(p1, p2, p3, p4, scale = 0.9) +
-    cowplot::draw_text("Deutanomaly", x = 0.01, y = .99, hjust = 0, vjust = 1, size = 12, fontface = "bold") +
-    cowplot::draw_text("Protanomaly", x = 0.51, y = .99, hjust = 0, vjust = 1, size = 12, fontface = "bold") +
-    cowplot::draw_text("Tritanomaly", x = 0.01, y = 0.49, hjust = 0, vjust = 1, size = 12, fontface = "bold") +
-    cowplot::draw_text("Desaturated", x = 0.51, y = 0.49, hjust = 0, vjust = 1, size = 12, fontface = "bold")
+  cowplot::plot_grid(p1, p2, p3, p4, scale = 0.9, hjust = 0, vjust = 1,
+                     labels = c("Deutanomaly", "Protanomaly", "Tritanomaly", "Desaturated"),
+                     label_x = 0.01, label_y = 0.99, label_size = 12, label_fontface = "bold")
 }
