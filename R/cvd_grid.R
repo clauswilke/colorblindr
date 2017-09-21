@@ -7,13 +7,13 @@
 #' @export
 cvd_grid <- function(plot, severity = 1)
 {
-  deut <- function(c) simulate_cvd(c, deutan_transform(severity))
+  deut <- function(c) deutan(c, severity)
   p1 <- edit_colors(plot, deut)
 
-  prot <- function(c) simulate_cvd(c, protan_transform(severity))
+  prot <- function(c) protan(c, severity)
   p2 <- edit_colors(plot, prot)
 
-  trit <- function(c) simulate_cvd(c, tritan_transform(severity))
+  trit <- function(c) tritan(c, severity)
   p3 <- edit_colors(plot, trit)
 
   des <- function(c) desaturate(c, severity)

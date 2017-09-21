@@ -13,11 +13,6 @@ Installation
 This package depends on the development versions of **cowplot** and **colorspace**. Please install those packages first:
 
     devtools::install_github("wilkelab/cowplot")
-
-    #On Windows(temporary fix):
-    devtools::install_github("clauswilke/colorspace")
-
-    #On non-Windows:
     install.packages("colorspace", repos = "http://R-Forge.R-project.org")
 
 Then install **colorblindr**:

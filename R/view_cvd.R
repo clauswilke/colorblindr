@@ -89,15 +89,15 @@ cvdServer <- function(plot) {
                       # here and below, precalculate matrix for increase
                       # in speed for figures with many colors
                       `Deutan (red/green)` = function(c) {
-                        cvd_transform <- deutan_transform(input$sev)
+                        cvd_transform <- interpolate_cvd_transform(colorspace::deutanomaly_cvd, input$sev)
                         simulate_cvd(c, cvd_transform) },
 
                       `Protan (red/green)`= function(c) {
-                        cvd_transform <- protan_transform(input$sev)
+                        cvd_transform <- interpolate_cvd_transform(colorspace::protanomaly_cvd, input$sev)
                         simulate_cvd(c, cvd_transform) },
 
                       `Tritan (blue/green)`= function(c) {
-                        cvd_transform <- tritan_transform(input$sev)
+                        cvd_transform <- interpolate_cvd_transform(colorspace::tritanomaly_cvd, input$sev)
                         simulate_cvd(c, cvd_transform) },
 
                       passthrough)
