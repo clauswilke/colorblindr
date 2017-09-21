@@ -113,18 +113,16 @@ plot_grid(p, p2, p3, p4, nrow=1)
 
 
 
-
-
-#The `view_cvd` function starts an shiny app to view simulations interactively. 
-#```{r}
+The `view_cvd` function starts an shiny app to view simulations interactively. 
+```{r}
 #library(magick)
 #p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
 ##view_cvd(p)
-#```
+```
 
-#
-#We can use custom rgb transform matrices to separate an image into its compenent red, green, and blue channels.
-#```{r}
+
+We can use custom rgb transform matrices to separate an image into its compenent red, green, and blue channels.
+```{r}
 
 #library(magick)
 #p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
@@ -173,8 +171,4 @@ plot_grid(p, p2, p3, p4, nrow=1)
 #p4 <-  edit_colors(p, to_random )
 #plot_grid(p1,p2,p3,p4)
 
-#```
-
-#
-#
-#
+```
