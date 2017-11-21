@@ -7,12 +7,15 @@
 \alias{scale_OkabeIto}
 \title{Okabe-Ito color scale}
 \arguments{
-\item{...}{common discrete scale parameters: \code{name}, \code{breaks}, \code{labels}, \code{na.value}, \code{limits} and \code{guide}. See
-\link{discrete_scale} for more details.}
+\item{...}{common discrete scale parameters: \code{name}, \code{breaks}, \code{labels}, \code{na.value}, \code{limits}, \code{guide}, and \code{aesthetics}.
+See \link{discrete_scale} for more details.}
 
 \item{use_black}{If \code{TRUE}, scale includes black, otherwise includes gray.}
 
 \item{order}{Numeric vector listing the order in which the colors should be used. Default is 1:8.}
+
+\item{darken}{Relative amount by which the scale should be darkened (for positive values) or lightened (for negatice
+values).}
 }
 \description{
 This is a color-blind friendly, qualitative scale with eight different colors. See \link{palette_OkabeIto} for details.
