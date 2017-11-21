@@ -8,6 +8,7 @@
 #'   geom_density(alpha = 0.7)
 #' view_cvd(plot)
 #' }
+#' @importFrom colorspace interpolate_cvd_transform simulate_cvd
 #' @export
 view_cvd <- function(plot) {
   if (!is.null(grDevices::dev.list())) {

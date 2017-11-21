@@ -4,6 +4,7 @@
 #' @param severity The severity of the simulation, applied equally to all four cases
 #' @examples
 #' cvd_grid(palette_plot(palette_OkabeIto, color_labels = FALSE))
+#' @importFrom colorspace deutan protan tritan desaturate
 #' @export
 cvd_grid <- function(plot, severity = 1)
 {
