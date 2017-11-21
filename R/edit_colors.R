@@ -72,7 +72,7 @@ edit_grob_colors <- function(grob, colfun, fillfun, ...)
 # any of the other gp data.
 edit_rastergrob_colors <- function(grob, colfun, ...)
 {
-  rasternew <- colfun(grob$raster, ...)
+  rasternew <- colfun(c(grob$raster), ...)
   dim(rasternew) <- dim(grob$raster)
   class(rasternew) <- class(grob$raster)
   grid::editGrob(grob, raster = rasternew)

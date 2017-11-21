@@ -106,12 +106,11 @@ We can use the library `magick` to convert images to ggplot objects and then edi
 ```{r fig.height=3}
 library(magick)
 p <- ggdraw() + draw_image("HSV-color-wheel.png") # turn png into ggplot object
-p2 <- edit_colors(p, deutan, sev = .3)
-p3 <- edit_colors(p, deutan, sev = .7)
-p4 <- edit_colors(p, deutan, sev = 1)
+p2 <- edit_colors(p, deutan, severity = .3)
+p3 <- edit_colors(p, deutan, severity = .7)
+p4 <- edit_colors(p, deutan, severity = 1)
 
 plot_grid(p, p2, p3, p4, nrow=1)
-
 ```
 
 As an example, we can use use custom rgb transform matrices to separate an image into its compenent red, green, and blue channels.
