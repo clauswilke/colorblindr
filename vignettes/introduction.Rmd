@@ -15,32 +15,35 @@ vignette: >
 
 #Introduction
 
-In any medium sized group of people, there is likely at least one person with color perception deficiencies. As color is used to encode information in plots, inability to perceive distinct colors causes comprehension problems. However, careful selection of colors allows plots to be generally interpretable. 
+In any medium sized group of people, there is likely at least one person with color perception deficiencies. Inability to perceive distinct colors can cause comprehension problems, particularly when color is used to encode information. Careful selection of colors will allow plots to be generally interpretable. 
 
-Colorblindr is a package to apply simulations of color vision deficiencies to existing ggplot2 figures. It can simulate various classes and severities of color blindness, as well as desaturate plots. More generally, colorblindr allows post-hoc editing of colors in ggplots. 
+`colorblindr` is a package to apply simulations of color vision deficiencies to existing ggplot2 figures. It can simulate various classes and severities of color blindness, as well as desaturate plots. More generally, colorblindr allows post-hoc editing of colors in ggplots. 
 
 
 We simulate color vision deficiencies using the algorithms from Machado 2009, ["A Physiologically-based Model for Simulation of Color Vision Deficiency"]( http://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html). The simulation is incorporated into the `colorspace` package. 
 
-`colorblindr` color simulations require the package `colorspace` to be installed by `install.packages("colorspace", repos = "http://R-Forge.R-project.org")` and be at least version 1.4-0.
+`colorblindr` color simulations require the package `colorspace` to be installed by `install.packages("colorspace", repos = "http://R-Forge.R-project.org")` and be at least version 1.4-0. 
 
 For more information on Color Universal Design see Masataka Okabe 
  and Kei Ito's [introduction](http://jfly.iam.u-tokyo.ac.jp/color/). Their 3 (+1) principles are:
 
- 1. Choose color schemes that can be easily identified by people with all types of color vision, in consideration with the actual lighting conditions and usage environment.
- 2.Use not only different colors but also a combination of different shapes, positions, line types and coloring patterns, to ensure that information is conveyed to all users including those who cannot distinguish differences in color.
- 3. Clearly state color names where users are expected to use color names in communication.
- +1. Moreover, aim for visually friendly and beautiful designs.
+``` 
+1. Choose color schemes that can be easily identified by people with all types of color vision, in consideration with the actual lighting conditions and usage environment.
+ 
+2. Use not only different colors but also a combination of different shapes, positions, line types and coloring patterns, to ensure that information is conveyed to all users including those who cannot distinguish differences in color.
+ 
+3. Clearly state color names where users are expected to use color names in communication.
+ 
++1. Moreover, aim for visually friendly and beautiful designs.
+```
 
 This package includes `scale_color_OkabeIto` and `scale_fill_OkabeIto` color palettes following their recommendations. 
 
 # Basic usage
 
-Make a figure an simulate severe deutanopia, protanopia, and tritanopia.
+The `cvd_grid` function will apply color vision deficiency simulations to a ggplot object. By default, `cvd_grid` displays severe deutanopia, protanopia, tritanopia simulations as well as a complete desaturation. Full desaturation is also useful to preview images as they would appear printed by black/white printers. 
 
 ```{r basic, warning=FALSE, message=FALSE}
-library(cowplot) # also loads ggplot2
-library(colorspace) # for desaturate
 library(colorblindr)
 
 p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
@@ -49,38 +52,61 @@ p <- ggplot(iris, aes(Sepal.Width, fill=Species)) +
 cvd_grid(p)
 ```
 
-Simulate more common, less severe color vision deficiencies by lowering `sev`.
+#### Simulate more common, less severe color vision deficiencies by lowering `sev`.
 ```{r}
 cvd_grid(p, sev = 0.5)
 ```
 
+# Shiny app
 
 The `view_cvd` function starts an shiny app to view simulations interactively. 
 ```{r eval=FALSE}
 view_cvd(p)
 ```
 
-
+screenshot
 ```{r echo=FALSE, out.width=800}
 knitr::include_graphics("shiny_screenshot_view_cvd.PNG")
 ```
 
-The `palette_OkabeIto`, and `palette_OkabeIto_black` palettes are provided as a convenient generally colorblind-friendly scheme. 
+# Okabe Ito palette
+The `palette_OkabeIto` palette is provided as a convenient generally colorblind-friendly 8-color qualitative scheme. Setting `use_black` to `TRUE` replaces the final gray with black. Use the`darken` option to lighten (-) or darken (+) the palette. 
 
-```{r fig.height=3}
-p2 <- p + scale_fill_OkabeIto()
-plot_grid(p, p2)
+```{r fig.height=3, warning = FALSE, message = FALSE}
+library(cowplot) #For plot_grid
+
+swatch <- ggplot(data= data.frame(color_id = c(1,2,3,4,5,6,7, 8)), aes(x=color_id, y=1, value=color_id, fill=as.character(color_id))) +
+      geom_tile() +
+      geom_text(aes(label=color_id), color="white", size=5) +
+      theme_nothing() +
+      theme(legend.position = "none")
+
+okabe_ito <- swatch + scale_fill_OkabeIto()
+with_black <- swatch + scale_fill_OkabeIto(use_black = TRUE) 
+darker <- swatch + scale_fill_OkabeIto(darken = 0.4)
+lighter <- swatch + scale_fill_OkabeIto(darken = -0.2)
+
+plot_grid(okabe_ito, with_black, darker, lighter, ncol = 1)
 ```
+
+You can also select and reorder palette colors using the `order` option. 
+
+```{r fig.height=3, warning = FALSE, message = FALSE}
+p2 <- p + scale_fill_OkabeIto()
+p3 <- p + scale_fill_OkabeIto(order = c(6, 4, 2))
+plot_grid(p2, p3, nrow = 1)
+```
+
 
 ### Edit plot colors 
 
 It is also possible to view one simulation at a time using the main `edit_color` function. 
-```{r fig.height=3}
+```{r fig.height = 3}
 p2 <- edit_colors(p, tritan, sev=0.8)
 plot_grid(p, p2)
 ```
 
-Or make desaturated plots.
+Or desaturate plots to varying degrees.
 ```{r}
 p2 <- edit_colors(p, desaturate, amount = .3)
 p3 <- edit_colors(p, desaturate, amount = .6)
@@ -90,7 +116,7 @@ plot_grid(p, p2, p3, p4)
 ```
 
 The function `edit_colors` also allows custom color replacement functions. At its simplest, we can replace either all `fill` colors with one color and all `color` with another.
-```{r fig.height=3}
+```{r fig.height = 3}
 
 to_white <- function(c) {"#FFFFFF"} # convert everything to white
 to_black <- function(c) {"#000000"} # convert everything to black
@@ -101,9 +127,10 @@ p3 <- edit_colors(p, colfun = to_black, fillfun = to_white)
 plot_grid(p2,p3, nrow=1)
 ```
 
+## Simulations on images
 
 We can use the library `magick` to convert images to ggplot objects and then edit colors. 
-```{r fig.height=3}
+```{r fig.height = 3, message = FALSE, warning = FALSE}
 library(magick)
 p <- ggdraw() + draw_image("HSV-color-wheel.png") # turn png into ggplot object
 p2 <- edit_colors(p, deutan, severity = .3)
@@ -113,7 +140,7 @@ p4 <- edit_colors(p, deutan, severity = 1)
 plot_grid(p, p2, p3, p4, nrow=1)
 ```
 
-As an example, we can use use custom rgb transform matrices to separate an image into its compenent red, green, and blue channels.
+As an example of custom `edit_colors` functions, we can use rgb transform matrices to separate an image into its compenent red, green, and blue channels.
 ```{r}
 
 p <- ggdraw() + draw_image("FluorescentCells.jpg") # turn jpg into ggplot object
