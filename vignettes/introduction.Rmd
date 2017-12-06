@@ -13,8 +13,6 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-#Introduction
-
 In any medium sized group of people, there is likely at least one person with color perception deficiencies. Inability to perceive distinct colors can cause comprehension problems, particularly when color is used to encode information. Careful selection of colors will allow plots to be generally interpretable. 
 
 `colorblindr` is a package to apply simulations of color vision deficiencies to existing ggplot2 figures. It can simulate various classes and severities of color blindness, as well as desaturate plots. More generally, colorblindr allows post-hoc editing of colors in ggplots. 
@@ -84,7 +82,7 @@ swatch <- ggplot(data= data.frame(color_id = c(1,2,3,4,5,6,7, 8)), aes(x=color_i
 okabe_ito <- swatch + scale_fill_OkabeIto()
 with_black <- swatch + scale_fill_OkabeIto(use_black = TRUE) 
 darker <- swatch + scale_fill_OkabeIto(darken = 0.4)
-lighter <- swatch + scale_fill_OkabeIto(darken = -0.2)
+lighter <- swatch + scale_fill_OkabeIto(darken = -0.4)
 
 plot_grid(okabe_ito, with_black, darker, lighter, ncol = 1)
 ```
@@ -166,6 +164,6 @@ to_blue <- function(c){simulate_cvd(c, matrix(c(
 p2 <-  edit_colors(p, to_red )
 p3 <-  edit_colors(p, to_green )
 p4 <-  edit_colors(p, to_blue )
-plot_grid(p,p2,p3,p4)
+plot_grid(p, p2, p3, p4, scale = 0.9)
 
 ```
