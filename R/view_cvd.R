@@ -11,7 +11,7 @@
 #' @importFrom colorspace interpolate_cvd_transform simulate_cvd
 #' @export
 view_cvd <- function(plot) {
-  if (!is.null(grDevices::dev.list())) {
+  if (FALSE) {
     message("Warning: You have open graphics devices. These will have to be closed before proceeding.")
     response <- readline(prompt="Do you want to close all open graphics devices (y/n)? ")
     if (response == "y" | response == "Y" ) {
@@ -104,7 +104,11 @@ cvdServer <- function(plot) {
                       passthrough)
 
       # draw the modified plot
-      grid::grid.draw(edit_colors(plot, colfun = colfun))
+      cur_dev <- dev.cur() # this is needed to make shiny behave correctly
+      grob <- edit_colors(plot, colfun = colfun)
+      dev.set(cur_dev)
+
+      grid::grid.draw(grob)
     })
   })
 }
