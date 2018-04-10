@@ -2,6 +2,7 @@
 #'
 #' @param colors Vector of color names or hex codes.
 #' @param label_size Size of the color labels to be printed.
+#' @param label_family Font family of the labels
 #' @param color_labels Individual bool or vector of bools indicating for which colors the
 #'   color names should be printed on top of the color swatch.
 #' @param ... Other parameters to be handed off to [gg_color_swatches].
@@ -10,7 +11,7 @@
 #' palette_plot(c("red", "green", "yellow", "magenta"), color_labels = FALSE)
 #' @importFrom ggplot2 ggplot aes geom_rect scale_fill_manual geom_text theme
 #' @export
-palette_plot <- function(colors, label_size = 6, color_labels = TRUE, ...)
+palette_plot <- function(colors, label_size = 6, label_family = "", color_labels = TRUE, ...)
 {
 
   if (length(color_labels)==1)
@@ -33,8 +34,10 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE, ...)
 
   gg_color_swatches(n = n, ...) +
     scale_fill_manual(values=colors) +
-    geom_text(data=tiles[tiles$light & color_labels,], aes(x, y, label=color), color="black", size=label_size) +
-    geom_text(data=tiles[!tiles$light & color_labels,], aes(x, y, label=color), color="white", size=label_size)
+    geom_text(data=tiles[tiles$light & color_labels,], aes(x, y, label=color), color="black",
+              size=label_size, family = label_family) +
+    geom_text(data=tiles[!tiles$light & color_labels,], aes(x, y, label=color), color="white",
+              size=label_size, family = label_family)
 }
 
 
@@ -50,6 +53,7 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE, ...)
 #' @param ymargin Fraction of each swatch to be used as margin in the y direction
 #' @param title Optional title to print above the color swatches. Can also be provided via [ggtitle].
 #' @param title_size Font size of the title
+#' @param title_family Font family of the title
 #' @param title_face Font face of the title
 #' @param plot_margin Margin around the plot, specified via the ggplot2 function [margin]
 #' @examples
@@ -58,7 +62,7 @@ palette_plot <- function(colors, label_size = 6, color_labels = TRUE, ...)
 #' @importFrom ggplot2 ggplot aes geom_rect theme element_text scale_x_continuous scale_y_continuous ggtitle margin
 #' @export
 gg_color_swatches <- function(n = 10, xmargin = 0.2, ymargin = 0,
-                              title = NULL, title_size = 14, title_face = "plain",
+                              title = NULL, title_size = 14, title_family = "", title_face = "plain",
                               plot_margin = margin(title_size/2, title_size/2, title_size/2, title_size/2))
 {
   tiles <- data.frame(xmin=(0:(n-1)+xmargin/2)/n,
@@ -77,7 +81,8 @@ gg_color_swatches <- function(n = 10, xmargin = 0.2, ymargin = 0,
     ggtitle(title) +
     cowplot::theme_nothing() +
     theme(plot.margin = plot_margin,
-          plot.title = element_text(face = title_face,
+          plot.title = element_text(family = title_family,
+                                    face = title_face,
                                     size = title_size,
                                     margin = margin(b = title_size/2),
                                     hjust = 0, vjust = 0.5))
@@ -93,6 +98,7 @@ gg_color_swatches <- function(n = 10, xmargin = 0.2, ymargin = 0,
 #' @param ymargin Fraction of each swatch to be used as margin in the y direction
 #' @param title Optional title to print above the color swatches. Can also be provided via [ggtitle].
 #' @param title_size Font size of the title
+#' @param title_family Font family of the title
 #' @param title_face Font face of the title
 #' @param plot_margin Margin around the plot, specified via the ggplot2 function [margin]
 #' @examples
@@ -100,7 +106,7 @@ gg_color_swatches <- function(n = 10, xmargin = 0.2, ymargin = 0,
 #' @importFrom ggplot2 ggplot aes geom_raster theme element_text scale_x_continuous scale_y_continuous ggtitle margin
 #' @export
 gg_color_gradient <- function(n = 200, ymargin = 0,
-                              title = NULL, title_size = 14, title_face = "plain",
+                              title = NULL, title_size = 14, title_family = "", title_face = "plain",
                               plot_margin = margin(title_size/2, title_size/2, title_size/2, title_size/2))
 {
   tiles <- data.frame(x = seq(-1, 1, length.out = n),
@@ -116,7 +122,8 @@ gg_color_gradient <- function(n = 200, ymargin = 0,
     ggtitle(title) +
     cowplot::theme_nothing() +
     theme(plot.margin = plot_margin,
-          plot.title = element_text(face = title_face,
+          plot.title = element_text(family = title_family,
+                                    face = title_face,
                                     size = title_size,
                                     margin = margin(b = title_size/2),
                                     hjust = 0, vjust = 0.5))

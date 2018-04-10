@@ -5,8 +5,9 @@
 \title{Generate a continuous color gradient to be colored via ggplot2's \code{scale_fill_*} mechanism}
 \usage{
 gg_color_gradient(n = 200, ymargin = 0, title = NULL, title_size = 14,
-  title_face = "plain", plot_margin = margin(title_size/2, title_size/2,
-  title_size/2, title_size/2))
+  title_family = "", title_face = "plain",
+  plot_margin = margin(title_size/2, title_size/2, title_size/2,
+  title_size/2))
 }
 \arguments{
 \item{n}{Number of distinct color slices to be drawn}
@@ -16,6 +17,8 @@ gg_color_gradient(n = 200, ymargin = 0, title = NULL, title_size = 14,
 \item{title}{Optional title to print above the color swatches. Can also be provided via \link{ggtitle}.}
 
 \item{title_size}{Font size of the title}
+
+\item{title_family}{Font family of the title}
 
 \item{title_face}{Font face of the title}
 
