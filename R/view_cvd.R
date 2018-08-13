@@ -10,7 +10,7 @@
 #' }
 #' @importFrom colorspace interpolate_cvd_transform simulate_cvd
 #' @export
-view_cvd <- function(plot) {
+view_cvd <- function(plot = last_plot()) {
   if (FALSE) {
     message("Warning: You have open graphics devices. These will have to be closed before proceeding.")
     response <- readline(prompt="Do you want to close all open graphics devices (y/n)? ")
