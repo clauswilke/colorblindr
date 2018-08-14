@@ -5,8 +5,9 @@
 #' @examples
 #' cvd_grid(palette_plot(palette_OkabeIto, color_labels = FALSE))
 #' @importFrom colorspace deutan protan tritan desaturate
+#' @importFrom ggplot2 last_plot
 #' @export
-cvd_grid <- function(plot, severity = 1)
+cvd_grid <- function(plot = last_plot(), severity = 1)
 {
   deut <- function(c) deutan(c, severity)
   p1 <- edit_colors(plot, deut)

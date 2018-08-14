@@ -4,8 +4,8 @@
 \alias{gg_color_gradient}
 \title{Generate a continuous color gradient to be colored via ggplot2's \code{scale_fill_*} mechanism}
 \usage{
-gg_color_gradient(n = 200, ymargin = 0, title = NULL, title_size = 14,
-  title_family = "", title_face = "plain",
+gg_color_gradient(n = 200, ymargin = 0, title = NULL,
+  title_size = 14, title_family = "", title_face = "plain",
   plot_margin = margin(title_size/2, title_size/2, title_size/2,
   title_size/2))
 }

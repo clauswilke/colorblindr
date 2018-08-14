@@ -4,7 +4,7 @@
 \alias{view_cvd}
 \title{Interactively view cvd simulations of a figure or plot}
 \usage{
-view_cvd(plot)
+view_cvd(plot = last_plot())
 }
 \arguments{
 \item{plot}{The plot or grid object to view}

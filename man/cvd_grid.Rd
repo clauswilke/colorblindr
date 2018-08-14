@@ -4,7 +4,7 @@
 \alias{cvd_grid}
 \title{Create a grid of different color-deficiency simulations of a plot}
 \usage{
-cvd_grid(plot, severity = 1)
+cvd_grid(plot = last_plot(), severity = 1)
 }
 \arguments{
 \item{plot}{The plot to modify}
