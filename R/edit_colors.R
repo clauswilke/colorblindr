@@ -20,6 +20,7 @@
 #' p4 <- edit_colors(p, desaturate)
 #' cowplot::plot_grid(p, p2, p3, p4)
 #' @export
+#' @importFrom ggplot2 last_plot
 edit_colors <- function(plot = last_plot(), colfun = passthrough, fillfun = NULL, ...)
 {
   # convert to grob if necessary

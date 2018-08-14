@@ -9,6 +9,7 @@
 #' view_cvd(plot)
 #' }
 #' @importFrom colorspace interpolate_cvd_transform simulate_cvd
+#' @importFrom ggplot2 last_plot
 #' @export
 view_cvd <- function(plot = last_plot()) {
   if (FALSE) {

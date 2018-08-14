@@ -5,7 +5,8 @@
 \alias{edit_grob_colors}
 \title{Edit colors in existing plot or grid object}
 \usage{
-edit_colors(plot, colfun = passthrough, fillfun = NULL, ...)
+edit_colors(plot = last_plot(), colfun = passthrough, fillfun = NULL,
+  ...)
 
 edit_grob_colors(grob, colfun, fillfun, ...)
 }
@@ -25,9 +26,6 @@ By default the same as \code{colfun}.}
 \description{
 The function \code{edit_colors()} can modify colors in existing ggplot2 plots, grid objects,
 or R base plots provided as recorded plots.
-
-The function \code{edit_grob_colors()} is identical to \code{edit_colors()} except it works only with objects of
-class \code{grob} and doesn't check its input.
 }
 \examples{
 library(ggplot2)
