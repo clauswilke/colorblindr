@@ -104,9 +104,9 @@ cvdServer <- function(plot) {
                       passthrough)
 
       # draw the modified plot
-      cur_dev <- dev.cur() # this is needed to make shiny behave correctly
+      cur_dev <- grDevices::dev.cur() # this is needed to make shiny behave correctly
       grob <- edit_colors(plot, colfun = colfun)
-      dev.set(cur_dev)
+      if (cur_dev > 1) grDevices::dev.set(cur_dev)
 
       grid::grid.draw(grob)
     })
