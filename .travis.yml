@@ -7,6 +7,14 @@ r_github_packages:
 
 repos:
   rforge: http://R-Forge.R-project.org
+  
+addons:
+  apt:
+    update: true
+    sources:
+      - sourceline: 'ppa:opencpu/imagemagick'
+    packages:
+      - libmagick++-dev
 
 after_success:
   - Rscript -e 'covr::codecov()'
