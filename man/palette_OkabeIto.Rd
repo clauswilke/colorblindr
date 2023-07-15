@@ -5,14 +5,18 @@
 \alias{palette_OkabeIto}
 \alias{palette_OkabeIto_black}
 \title{Color palette proposed by Okabe and Ito}
-\format{An object of class \code{character} of length 8.}
+\format{
+An object of class \code{character} of length 8.
+
+An object of class \code{character} of length 8.
+}
 \usage{
 palette_OkabeIto
 
 palette_OkabeIto_black
 }
 \description{
-Two color palettes taken from the article "Color Universal Design" by Okabe and Ito, http://jfly.iam.u-tokyo.ac.jp/color/.
+Two color palettes taken from the article \href{https://web.archive.org/web/20210108233739/http://jfly.iam.u-tokyo.ac.jp/color/}{"Color Universal Design" by Okabe and Ito}.
 The variant \code{palette_OkabeIto} contains a gray color, while \code{palette_OkabeIto_black} contains black instead.
 }
 \keyword{datasets}
